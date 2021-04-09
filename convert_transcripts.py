@@ -48,10 +48,35 @@ def extract_data_from_go_transcript(turns_of_talk: list):
     return transcript
 
 
+def extract_data_from_otter_transcript(turns_of_talk: list):
+    speaker_tags = []
+    time_stamps = []
+    texts = []
+    turn = 6
+    while turn < len(turns_of_talk):
+        speaker_tags.append(turns_of_talk[turn][:-5])
+        time_stamps.append(turns_of_talk[turn][-5:])
+        turn = turn + 1
+
+        texts.append(turns_of_talk[turn])
+        turn = turn + 1
+
+    Transcript = collections.namedtuple(
+        "Transcript", ["time_stamps", "speaker_tags", "text"]
+    )
+
+    transcript = Transcript(
+        time_stamps=time_stamps, speaker_tags=speaker_tags, text=texts
+    )
+    return transcript
+
+
 def word_to_transcript(doc_file=str):
     paragraphs = extract_paragraphs(doc_file=doc_file)
-    if "[00:" in paragraphs[0]:
+    if "[0" in paragraphs[0]:
         return extract_data_from_go_transcript(turns_of_talk=paragraphs)
+    if paragraphs[2] == "SUMMARY KEYWORDS":
+        return extract_data_from_otter_transcript(turns_of_talk=paragraphs)
 
     else:
         print("error with " + doc_file)
