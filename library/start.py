@@ -1,4 +1,4 @@
-MAIN_PATH = (
+SHARED_PATH = (
     "/Users/kylie/Box Sync/Measuring Coaching Fidelity and Quality/-coaching moves/"
 )
-TRANSCRIPTS_PATH = MAIN_PATH + "uncoded transcripts/"
+TRANSCRIPTS_PATH = SHARED_PATH + "uncoded transcripts/"
