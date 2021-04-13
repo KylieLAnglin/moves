@@ -122,7 +122,7 @@ def transcript_to_excel(transcript, excel_template: str, excel_file: str):
 
 files = [
     filename
-    for filename in os.listdir(start.MAIN_PATH + "uncoded transcripts/")
+    for filename in os.listdir(start.SHARED_PATH + "uncoded transcripts/")
     if fnmatch.fnmatch(filename, "*.docx") and not filename.startswith("~$")
 ]
 
@@ -134,8 +134,8 @@ for filename in files:
     if transcript:
         transcript_to_excel(
             transcript=transcript,
-            excel_template=start.MAIN_PATH + "template.xlsx",
-            excel_file=start.MAIN_PATH + "excel transcripts/" + filename + ".xlsx",
+            excel_template=start.SHARED_PATH + "template.xlsx",
+            excel_file=start.SHARED_PATH + "excel transcripts/" + filename + ".xlsx",
         )
 
 
@@ -145,19 +145,4 @@ for filename in files:
 random.seed(10)
 random.shuffle(files)
 random_df = pd.DataFrame(files)
-random_df.to_csv(MAIN_PATH + "random_order.csv")
-
-
-first_three = [
-    "01_1920_02_2670167_22c_Transcript.docx",
-    "2019_96_5C_Transcript.docx",
-    "01_1920_01_2842293_12c_Transcript.docx",
-]
-for filename in first_three:
-    filename = filename[:-5]
-    print(filename)
-    transcript_to_excel(
-        excel_template=start.MAIN_PATH + "template.xlsx",
-        doc_file=start.MAIN_PATH + "uncoded transcripts/" + filename + ".docx",
-        excel_file=start.MAIN_PATH + "excel transcripts/" + filename + ".xlsx",
-    )
+random_df.to_csv(SHARED_PATH + "random_order.csv")
