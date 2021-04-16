@@ -15,30 +15,27 @@ from moves.library import process_transcripts
 # %%
 
 # %%
-def transcript_to_excel(transcript, excel_template: str, excel_file: str):
+def transcript_df_to_excel(transcript_df, excel_template: str, excel_file: str):
 
     wb = load_workbook(excel_template)
     ws = wb.active
 
     row = 2
     col = 1
-    for time in transcript.time_stamps:
+    for time in transcript_df.time:
         ws.cell(row=row, column=col).value = str(time)
         row = row + 1
 
     row = 2
     col = 2
-    speaker_tags = [tag[0] if tag else "" for tag in transcript.speaker_tags]
-    current_speaker = ""
-    for speaker in speaker_tags:
-        if speaker:
-            current_speaker = speaker
-        ws.cell(row=row, column=col).value = str(current_speaker)
+
+    for speaker in transcript_df.speaker:
+        ws.cell(row=row, column=col).value = str(speaker)
         row = row + 1
 
     row = 2
     col = 3
-    for text in transcript.text:
+    for text in transcript_df.text:
         ws.cell(row=row, column=col).value = text
         row = row + 1
 
@@ -70,8 +67,11 @@ for filename in files:
     )
     filename = filename[:-5]
     if transcript:
-        transcript_to_excel(
-            transcript=transcript,
+        transcript_df = process_transcripts.transcript_to_cleaned_df(
+            transcript=transcript
+        )
+        transcript_df_to_excel(
+            transcript_df=transcript_df,
             excel_template=start.SHARED_PATH + "template.xlsx",
             excel_file=start.SHARED_PATH + "excel transcripts/" + filename + ".xlsx",
         )
