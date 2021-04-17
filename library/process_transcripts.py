@@ -45,9 +45,20 @@ def extract_data_from_go_transcript(turns_of_talk: list):
 
     turns_of_talk = [re.sub(time_stamp_regex, "", text) for text in turns_of_talk]
 
-    speaker_tag_regex = re.compile(r"(\S[a-zA-Z]+)\:")
+    speaker_tag_regex = re.compile(r"(\S[a-zA-Z1-3]+)\:")
     speaker_tags = [speaker_tag_regex.findall(text) for text in turns_of_talk]
+
     turns_of_talk = [re.sub(speaker_tag_regex, "", text) for text in turns_of_talk]
+
+    if speaker_tags[2] == []:
+        speaker_tag_regex = re.compile(r"([A-z]+\s[A-z]+[\s1-9]+)\:")
+        speaker_tags = [speaker_tag_regex.findall(text) for text in turns_of_talk]
+        turns_of_talk = [re.sub(speaker_tag_regex, "", text) for text in turns_of_talk]
+
+    if speaker_tags[2] == []:
+        speaker_tag_regex = re.compile(r"([A-z]+[\s1-9]+)\:")
+        speaker_tags = [speaker_tag_regex.findall(text) for text in turns_of_talk]
+        turns_of_talk = [re.sub(speaker_tag_regex, "", text) for text in turns_of_talk]
 
     Transcript = collections.namedtuple(
         "Transcript", ["time_stamps", "speaker_tags", "text"]
