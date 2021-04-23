@@ -8,8 +8,7 @@ from openpyxl import load_workbook
 from moves.library import start
 
 
-random.seed(1991)
-
+RANDOM_SEED = 1991
 # Create a LOOONNNGGG dataframe with each turn of talk,
 # it's position in the transcript, the transcript name
 # and the speaker tag.
@@ -84,7 +83,7 @@ def randomly_select_coach_preceding_turns(df):
 # for i in range(16):
 #     random_df = random_df.append(randomly_select_coach_turn(df))
 
-wb = load_workbook(start.DATA_PATH + "certification.xlsx")
+wb = load_workbook(start.DATA_PATH + "certification1.xlsx")
 ws = wb.active
 
 row = 2
@@ -99,6 +98,57 @@ for i in range(20):
         row = row + 1
     row = row + 2
 
-wb.save(start.DATA_PATH + "certification.xlsx")
+wb.save(start.DATA_PATH + "certification1.xlsx")
+
+
+wb = load_workbook(start.DATA_PATH + "certification2.xlsx")
+ws = wb.active
+row = 2
+for i in range(20):
+    random_df = randomly_select_coach_preceding_turns(df)
+    random_df = random_df.reset_index()
+    for item in random_df.index:
+        ws.cell(row=row, column=1).value = random_df.loc[item]["Time-stamp"]
+        ws.cell(row=row, column=2).value = random_df.loc[item]["Speaker"]
+        ws.cell(row=row, column=3).value = random_df.loc[item]["Text"]
+
+        row = row + 1
+    row = row + 2
+wb.save(start.DATA_PATH + "certification2.xlsx")
+
+
+wb = load_workbook(start.DATA_PATH + "certification3.xlsx")
+ws = wb.active
+row = 2
+for i in range(20):
+    random_df = randomly_select_coach_preceding_turns(df)
+    random_df = random_df.reset_index()
+    for item in random_df.index:
+        ws.cell(row=row, column=1).value = random_df.loc[item]["Time-stamp"]
+        ws.cell(row=row, column=2).value = random_df.loc[item]["Speaker"]
+        ws.cell(row=row, column=3).value = random_df.loc[item]["Text"]
+
+        row = row + 1
+    row = row + 2
+
+wb.save(start.DATA_PATH + "certification3.xlsx")
+
+
+wb = load_workbook(start.DATA_PATH + "certification4.xlsx")
+ws = wb.active
+row = 2
+for i in range(20):
+    random_df = randomly_select_coach_preceding_turns(df)
+    random_df = random_df.reset_index()
+    for item in random_df.index:
+        ws.cell(row=row, column=1).value = random_df.loc[item]["Time-stamp"]
+        ws.cell(row=row, column=2).value = random_df.loc[item]["Speaker"]
+        ws.cell(row=row, column=3).value = random_df.loc[item]["Text"]
+
+        row = row + 1
+    row = row + 2
+
+wb.save(start.DATA_PATH + "certification4.xlsx")
+
 
 # %%
