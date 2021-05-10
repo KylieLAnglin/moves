@@ -43,6 +43,14 @@ def transcript_df_to_excel(transcript_df, excel_template: str, excel_file: str):
 
 
 # %%
+speaker_tags = pd.read_excel(start.DATA_PATH + "speaker_tags.xlsx")
+
+speaker_tags = {
+    doc: coach for (doc, coach) in zip(speaker_tags.doc, speaker_tags.coach)
+}
+speaker_tags = {doc: speaker[:-1] for (doc, speaker) in speaker_tags.items()}
+
+# %%
 
 # PATH = "/Users/kylie/Dropbox/1 Projects/Coaching Moves/"
 # doc_file = "29_c_Transcript-updated"
@@ -65,11 +73,16 @@ for filename in files:
     transcript = process_transcripts.word_to_transcript(
         doc_file=start.TRANSCRIPTS_PATH + filename
     )
-    filename = filename[:-5]
     if transcript:
         transcript_df = process_transcripts.transcript_to_cleaned_df(
             transcript=transcript
         )
+        speakers = [
+            speaker.replace(speaker_tags[filename], "Coach")
+            for speaker in transcript_df.speaker
+        ]
+        transcript_df["speaker"] = speakers
+        filename = filename[:-5]
         transcript_df_to_excel(
             transcript_df=transcript_df,
             excel_template=start.SHARED_PATH + "template.xlsx",

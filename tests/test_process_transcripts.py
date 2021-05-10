@@ -41,4 +41,22 @@ def test_otter_transcript():
     assert df.loc[0]["time"] == "00:00"
 
 
+test = "01_1920_05_059_22c_Transcript.docx"
+
+
+def test_female_speaker_1():
+    paragraphs = process_transcripts.extract_paragraphs(start.TRANSCRIPTS_PATH + test)
+    transcript = process_transcripts.word_to_transcript(start.TRANSCRIPTS_PATH + test)
+    df = process_transcripts.transcript_to_cleaned_df(transcript)
+    assert df.loc[0]["speaker"] == "Female Speaker 1"
+
+
+def test_speaker_1():
+    test = "2019_84_5C_Transcript.docx"
+    paragraphs = process_transcripts.extract_paragraphs(start.TRANSCRIPTS_PATH + test)
+    transcript = process_transcripts.word_to_transcript(start.TRANSCRIPTS_PATH + test)
+    df = process_transcripts.transcript_to_cleaned_df(transcript)
+    assert df.loc[0]["speaker"] == "Female 2"
+
+
 # %%
