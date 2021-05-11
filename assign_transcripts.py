@@ -2,14 +2,12 @@
 import random
 
 import pandas as pd
-import openpyxl
-from openpyxl import load_workbook
-from openpyxl import Workbook
-from openpyxl.utils.dataframe import dataframe_to_rows
+import numpy as np
 
-# %%
+import xlsxwriter
 
 from moves.library import start
+
 
 # %%
 files = os.listdir(start.SHARED_PATH + "excel transcripts/")
@@ -52,7 +50,9 @@ new_df = coach_df.merge(
     right_on=["doc", "turn_count"],
 )
 new_df = new_df[["doc", "turn_count", "preceding_teacher_text", "Text"]]
-
+new_df["preceding_teacher_text"] = np.where(
+    new_df.preceding_teacher_text.isnull(), "None", new_df.preceding_teacher_text
+)
 # %%
 new_df["id"] = new_df.reset_index().index
 
@@ -68,23 +68,74 @@ pilot1_list = transcript_files[0:10]
 pilot1 = new_df[new_df.doc.isin(pilot1_list)]
 
 # %% Out-of-Context
-move = "TellBack Positive Evaluation"
-wb = Workbook()
-ws = wb.active
-ws["B1"] = "TIME SPENT CODING IN MINUTES (B1) TO THE NEAREST SECOND (C1) "
-ws["B2"] = "MOVE: "
-ws["C2"] = move
-ws["C3"] = "Text"
-ws["C3"] = "Code"
+moves = [
+    "1 TellBack Positive Evaluation",
+    "2 Tellback Observation",
+    "3 Tellforward Suggestion",
+]
+for move in moves:
+    workbook = xlsxwriter.Workbook(
+        start.SHARED_PATH + "coding files/Pilot 1 Out-of-Context/" + move + ".xlsx"
+    )
+    worksheet = workbook.add_worksheet()
 
-pilot1_out_of_context = pilot1.sample(len(pilot1), random_state=10).rename(
-    columns={"preceding_teacher_text": "Preceding Teacher Text"}
-)
-for r in dataframe_to_rows(
-    pilot1_out_of_context[["id", "Text"]], index=False, header=False
-):
-    ws.append(r)
+    bolded = workbook.add_format({"bold": True, "italic": False})
+    wrapped = workbook.add_format(
+        {"color": "black", "underline": False, "text_wrap": True}
+    )
+    bolded_and_wrapped = workbook.add_format(
+        {"color": "black", "bold": True, "text_wrap": True}
+    )
+    worksheet.set_column(1, 2, 30)
+    worksheet.set_column(0, 0, 20)
 
-wb.save(start.SHARED_PATH + "coding files/Pilot 1 Out-of-Context/1 " + move + ".xlsx")
+    worksheet.write(
+        "A2",
+        "TIME SPENT CODING IN MINUTES (B2) TO THE NEAREST SECOND (D2)",
+        bolded_and_wrapped,
+    )
+    worksheet.write("B1", "Minutes", bolded)
+    worksheet.write("C1", "Seconds", bolded)
+
+    worksheet.write("A3", "MOVE: " + move, bolded)
+    worksheet.write("A4", "ID", bolded)
+    worksheet.write("B4", "Preceding Teacher Text", bolded)
+    worksheet.write("C4", "Coach Text", bolded)
+    worksheet.write("D4", "Code", bolded)
+
+    pilot1_out_of_context = pilot1.sample(len(pilot1), random_state=10)
+    start_row = 4
+    col = 0
+    for value in pilot1_out_of_context.id:
+        worksheet.write(start_row, col, value)
+        start_row = start_row + 1
+
+    start_row = 4
+    col = 1
+    for value in pilot1_out_of_context.preceding_teacher_text:
+        worksheet.write(start_row, col, value, wrapped)
+        start_row = start_row + 1
+
+    start_row = 4
+    col = 2
+    for value in pilot1_out_of_context.Text:
+        worksheet.write(start_row, col, value, wrapped)
+        start_row = start_row + 1
+
+    worksheet.data_validation(
+        first_row=4,
+        first_col=3,
+        last_row=200,
+        last_col=3,
+        options={
+            "validate": "integer",
+            "criteria": "between",
+            "minimum": 0,
+            "maximum": 0,
+            "input_title": "Enter 0 or 1:",
+        },
+    )
+
+    workbook.close()
 
 # %%
