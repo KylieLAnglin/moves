@@ -36,6 +36,16 @@ for filename in transcript_files:
 
 df["turn_count"] = df.groupby("doc").cumcount()
 df = df[["doc", "Time-stamp", "turn_count", "Speaker", "Text"]]
+# %%
+df["id"] = df.reset_index().index
+
+df = df[["id", "doc", "turn_count", "Speaker", "Text"]]
+
+df.to_csv(start.SHARED_PATH + "utterance_id.csv", index=False)
+
+df = pd.read_csv(start.SHARED_PATH + "utterance_id.csv")
+
+# %%
 
 coach_df = df[df.Speaker == "Coach"]
 teacher_df = df[df.Speaker != "Coach"]
@@ -49,33 +59,39 @@ new_df = coach_df.merge(
     left_on=["doc", "turn_count"],
     right_on=["doc", "turn_count"],
 )
-new_df = new_df[["doc", "turn_count", "preceding_teacher_text", "Text"]]
+new_df = new_df[["id", "doc", "turn_count", "preceding_teacher_text", "Text"]]
 new_df["preceding_teacher_text"] = np.where(
     new_df.preceding_teacher_text.isnull(), "None", new_df.preceding_teacher_text
 )
+
 # %%
-new_df["id"] = new_df.reset_index().index
-
-new_df = new_df[["id", "doc", "turn_count", "preceding_teacher_text", "Text"]]
-
-new_df.to_csv(start.SHARED_PATH + "utterance_id.csv", index=False)
-
-new_df = pd.read_csv(start.SHARED_PATH + "utterance_id.csv")
-
-# %% Select 10 transcripts for coding
-pilot1_list = transcript_files[0:10]
-
-pilot1 = new_df[new_df.doc.isin(pilot1_list)]
-
-# %% Out-of-Context
 moves = [
     "1 TellBack Positive Evaluation",
     "2 Tellback Observation",
     "3 Tellforward Suggestion",
+    "4 Tellforward Instruction",
+    "5 Tellforward Demonstration",
+    "6 Askforward Anticipation",
+    "7 Practice",
+    "8 Rapport Encouragement",
 ]
+# %% Select 10 transcripts for coding
+week0_incontext_list = list(transcript_files[0:1])
+
+week0_incontext = df[df.doc.isin(week0_incontext_list)]
+
+# %%
+week0_outcontext_list = list(transcript_files[1:2])
+
+week0_outcontext = new_df[new_df.doc.isin(week0_outcontext_list)]
+week0_outcontext = week0_outcontext.sample(len(week0_outcontext))
+
+
+# %% Out-of-Context
+
 for move in moves:
     workbook = xlsxwriter.Workbook(
-        start.SHARED_PATH + "coding files/Pilot 1 Out-of-Context/" + move + ".xlsx"
+        start.SHARED_PATH + "coding files/Week 0 Out-of-Context/" + move + ".xlsx"
     )
     worksheet = workbook.add_worksheet()
 
@@ -103,22 +119,21 @@ for move in moves:
     worksheet.write("C4", "Coach Text", bolded)
     worksheet.write("D4", "Code", bolded)
 
-    pilot1_out_of_context = pilot1.sample(len(pilot1), random_state=10)
     start_row = 4
     col = 0
-    for value in pilot1_out_of_context.id:
+    for value in week0_outcontext.id:
         worksheet.write(start_row, col, value)
         start_row = start_row + 1
 
     start_row = 4
     col = 1
-    for value in pilot1_out_of_context.preceding_teacher_text:
+    for value in week0_outcontext.preceding_teacher_text:
         worksheet.write(start_row, col, value, wrapped)
         start_row = start_row + 1
 
     start_row = 4
     col = 2
-    for value in pilot1_out_of_context.Text:
+    for value in week0_outcontext.Text:
         worksheet.write(start_row, col, value, wrapped)
         start_row = start_row + 1
 
@@ -137,5 +152,76 @@ for move in moves:
     )
 
     workbook.close()
+
+# %%
+moves.append("NA")
+transcript = 1
+for doc in week0_incontext_list:
+
+    transcript_df = df[df.doc == doc]
+
+    # In Context
+    workbook = xlsxwriter.Workbook(
+        start.SHARED_PATH
+        + "coding files/Week 0 In-Context/Transcript"
+        + str(transcript)
+        + ".xlsx"
+    )
+    worksheet = workbook.add_worksheet()
+
+    bolded = workbook.add_format({"bold": True, "italic": False})
+    wrapped = workbook.add_format(
+        {"color": "black", "underline": False, "text_wrap": True}
+    )
+    bolded_and_wrapped = workbook.add_format(
+        {"color": "black", "bold": True, "text_wrap": True}
+    )
+    worksheet.set_column(1, 2, 30)
+    # worksheet.set_column(0, 0, 20)
+
+    worksheet.write(
+        "A2",
+        "TIME SPENT CODING IN MINUTES (B2) TO THE NEAREST SECOND (D2)",
+        bolded_and_wrapped,
+    )
+    worksheet.write("B1", "Minutes", bolded)
+    worksheet.write("C1", "Seconds", bolded)
+
+    worksheet.write("A3", "ID", bolded)
+    worksheet.write("B3", "Speaker", bolded)
+    worksheet.write("C3", "Text", bolded)
+
+    worksheet.write("D3", "Move 1", bolded)
+    worksheet.write("E3", "Move 2", bolded)
+    worksheet.write("F3", "Move 3", bolded)
+    worksheet.write("G3", "Move 4", bolded)
+    worksheet.write("H3", "Move 5", bolded)
+
+    start_row = 3
+    col = 0
+    for value in week0_incontext.id:
+        worksheet.write(start_row, col, value)
+        start_row = start_row + 1
+
+    start_row = 3
+    col = 1
+    for value in week0_incontext.Speaker:
+        worksheet.write(start_row, col, value)
+        start_row = start_row + 1
+
+    start_row = 3
+    col = 2
+    for value in week0_incontext.Text:
+        worksheet.write(start_row, col, value, wrapped)
+        start_row = start_row + 1
+
+    worksheet.data_validation(3, 3, 100, 7, {"validate": "list", "source": moves})
+
+    transcript = transcript + 1
+
+    workbook.close()
+
+# %%
+
 
 # %%
