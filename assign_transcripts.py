@@ -84,7 +84,7 @@ week0_incontext = df[df.doc.isin(week0_incontext_list)]
 week0_outcontext_list = list(transcript_files[1:2])
 
 week0_outcontext = new_df[new_df.doc.isin(week0_outcontext_list)]
-week0_outcontext = week0_outcontext.sample(len(week0_outcontext))
+week0_outcontext = week0_outcontext.sample(len(week0_outcontext), random_state=5)
 
 
 # %% Out-of-Context
