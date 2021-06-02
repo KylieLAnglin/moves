@@ -131,7 +131,7 @@ for move in moves:
             "validate": "integer",
             "criteria": "between",
             "minimum": 0,
-            "maximum": 0,
+            "maximum": 1,
             "input_title": "Enter 0 or 1:",
         },
     )
