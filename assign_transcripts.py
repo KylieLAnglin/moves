@@ -43,9 +43,9 @@ df = df[["id", "doc", "turn_count", "Speaker", "Text"]]
 
 df.to_csv(start.SHARED_PATH + "utterance_id.csv", index=False)
 
-df = pd.read_csv(start.SHARED_PATH + "utterance_id.csv")
 
 # %%
+df = pd.read_csv(start.SHARED_PATH + "utterance_id.csv")
 
 coach_df = df[df.Speaker == "Coach"]
 teacher_df = df[df.Speaker != "Coach"]
@@ -167,6 +167,7 @@ def create_out_of_context_files(filepath: str, turns_df: pd.DataFrame):
         workbook.close()
 
 
+# %%
 create_out_of_context_files(
     filepath=start.SHARED_PATH + "coding files/Week 0 Out-of-Context/",
     turns_df=week0_outcontext,
@@ -199,6 +200,7 @@ def create_in_context_file(filepath: str, turns_df: pd.DataFrame):
         "6 Askforward Anticipation",
         "7 Practice",
         "8 Rapport Encouragement",
+        "Teacher",
         "NA",
     ]
 
@@ -267,6 +269,7 @@ def create_in_context_file(filepath: str, turns_df: pd.DataFrame):
         workbook.close()
 
 
+# %%
 create_in_context_file(
     filepath=start.SHARED_PATH + "coding files/Week 0 In-Context/",
     turns_df=week0_incontext,
