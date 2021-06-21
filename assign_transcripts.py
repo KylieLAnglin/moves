@@ -10,14 +10,14 @@ from moves.library import start
 
 
 # %%
-files = os.listdir(start.SHARED_PATH + "excel transcripts/")
+# files = os.listdir(start.SHARED_PATH + "excel transcripts/")
 
 
-# Create random order of files for coding
-random.seed(10)
-random.shuffle(files)
-random_df = pd.DataFrame(files)
-random_df.to_csv(start.SHARED_PATH + "assignments.csv")
+# # Create random order of files for coding
+# random.seed(10)
+# random.shuffle(files)
+# random_df = pd.DataFrame(files)
+# random_df.to_csv(start.SHARED_PATH + "assignments.csv")
 
 random_order = pd.read_csv(start.SHARED_PATH + "assignments.csv")
 
@@ -68,8 +68,8 @@ new_df["preceding_teacher_text"] = np.where(
 week0_list = list(transcript_files[0:1])
 week1_list = list(transcript_files[1:11])
 week2_list = list(transcript_files[11:21])
-week3_list = list(transcript_files[21:31])
-week4_list = list(transcript_files[31:41])
+week3_list = list(transcript_files[31:41])
+week4_list = list(transcript_files[41:51])
 
 week0_incontext = df[df.doc.isin(week0_list)]
 week1_incontext = df[df.doc.isin(week1_list)]
