@@ -18,22 +18,21 @@ files = [
 in_context = pd.DataFrame()
 for file in files:
 
-    df = pd.concat(
-        pd.read_excel(
-            start.SHARED_PATH + "coding/Week 3 Coder 1 In-Context/" + file,
-            sheet_name=None,
-            skiprows=2,
-        ),
-        ignore_index=True,
-        sort=False,
-    )
+    df = pd.read_excel(
+        start.SHARED_PATH + "coding/Week 3 Coder 1 In-Context/" + file,
+        skiprows=2,
+    ).rename(columns={"ID 3": "ID", "ID 3 ": "ID"})
 
     # Appending excel files one by one
     in_context = in_context.append(df, ignore_index=True)
 
 
 in_context = in_context.merge(
-    utterance_ids[["id", "doc"]], how="left", left_on="ID", right_on="id"
+    utterance_ids[["id", "doc"]],
+    how="left",
+    left_on="ID",
+    right_on="id",
+    indicator=True,
 )
 
 in_context_transcripts = list(in_context.doc.unique())
@@ -46,7 +45,11 @@ out_context = pd.read_excel(
 )
 
 out_context = out_context.merge(
-    utterance_ids[["id", "doc"]], how="left", left_on="ID", right_on="id"
+    utterance_ids[["id", "doc"]],
+    how="left",
+    left_on="ID",
+    right_on="id",
+    indicator=True,
 )
 
 out_context_transcripts = list(out_context.doc.unique())
