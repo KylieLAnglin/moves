@@ -40,8 +40,8 @@ new_df["preceding_teacher_text"] = np.where(
 week0_list = list(transcript_files[0:1])
 week1_list = list(transcript_files[1:11])
 week2_list = list(transcript_files[11:21])
-week3_list = list(transcript_files[31:41])
-week4_list = list(transcript_files[41:51])
+week3_list = list(transcript_files[52:57])
+week4_list = list(transcript_files[58:63])
 
 week0_incontext = df[df.doc.isin(week0_list)]
 week1_incontext = df[df.doc.isin(week1_list)]
@@ -153,11 +153,11 @@ create_out_of_context_files(
     turns_df=week2_outcontext,
 )
 create_out_of_context_files(
-    filepath=start.SHARED_PATH + "coding files/Week 3 Out-of-Context/",
+    filepath=start.SHARED_PATH + "coding files/Week 4a Out-of-Context/",
     turns_df=week3_outcontext,
 )
 create_out_of_context_files(
-    filepath=start.SHARED_PATH + "coding files/Week 4 Out-of-Context/",
+    filepath=start.SHARED_PATH + "coding files/Week 4b Out-of-Context/",
     turns_df=week4_outcontext,
 )
 
@@ -258,12 +258,12 @@ create_in_context_file(
 )
 
 create_in_context_file(
-    filepath=start.SHARED_PATH + "coding files/Week 3 In-Context/",
+    filepath=start.SHARED_PATH + "coding files/Week 4a In-Context/",
     turns_df=week3_incontext,
 )
 
 create_in_context_file(
-    filepath=start.SHARED_PATH + "coding files/Week 4 In-Context/",
+    filepath=start.SHARED_PATH + "coding files/Week 4b In-Context/",
     turns_df=week4_incontext,
 )
 
