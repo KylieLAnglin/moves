@@ -9,6 +9,7 @@ from moves.library import start
 
 # %%
 file_date = date.today()
+file_date = "2021-07-06"
 print("File date:", file_date)
 
 file_folder = start.IRR_PATH + "outputs/spotcheck_files/"
@@ -120,9 +121,37 @@ df[
 
 
 # %%
+df["utterances"] = 1
 df_sum = (
-    df[["week", "move", "all_agree", "any_positive", "incontext_sum", "outcontext_sum"]]
+    df[
+        [
+            "week",
+            "move",
+            "utterances",
+            "all_agree",
+            "any_positive",
+            "incontext_sum",
+            "outcontext_sum",
+        ]
+    ]
     .groupby(by=["week", "move"])
     .sum()
 )
+
+df_sum = (
+    df[
+        [
+            "move",
+            "utterances",
+            "all_agree",
+            "any_positive",
+            "incontext_sum",
+            "outcontext_sum",
+        ]
+    ]
+    .groupby(by=["move"])
+    .sum()
+)
+
+df_sum_sum = df_sum.reset_index().groupby()
 # %%

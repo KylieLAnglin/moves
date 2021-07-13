@@ -45,10 +45,13 @@ todd_df = pd.read_csv(
 ).set_index("id")
 
 todd_df = todd_df[(todd_df.week == 1) | (todd_df.week == 2)]
-todd_df = todd_df[todd_df.index != 572]
+todd_df = todd_df[
+    ~todd_df.index.isin([574, 423, 575, 572, 585, 568, 570, 591, 581, 583, 589, 461])
+]
 
 todd_df = todd_df.astype({"week": "int32"})
 kylie_df = kylie_df.astype({"week": "int32", "incontext_b": "int64"})
+kylie_df = kylie_df[~kylie_df.index.isin([461])]
 
 # %%
 compare_df = kylie_df.merge(
