@@ -43,7 +43,7 @@ def import_incontext(folder_path: str, week: int, coder: int):
             + str(transcript)
             + ".xlsx",
             skiprows=2,
-        )
+        ).rename(columns={"ID 3": "ID", "ID 3 ": "ID"})
         print(len(df))
         transcript_df = transcript_df.append(df)
     transcript_df["week"] = week
@@ -185,9 +185,9 @@ def merge_coders(move: str):
         columns={move_dict[move]: "outcontext_b"}
     )
 
-    move_df = incontext_a_df.merge(incontext_b_df, on=["ID"])
-    move_df = move_df.merge(outcontext_a_df, on=["ID"])
-    move_df = move_df.merge(outcontext_b_df, on=["ID"])
+    move_df = incontext_a_df.merge(incontext_b_df, how="left", on=["ID"])
+    move_df = move_df.merge(outcontext_a_df, how="left", on=["ID"])
+    move_df = move_df.merge(outcontext_b_df, how="left", on=["ID"])
 
     return move_df
 
