@@ -27,6 +27,9 @@ def extract_times_in_context(folder_path: str, week: int, coder: int):
         time_df["seconds"] = time_df.Minutes * 60 + time_df.Seconds
         incontext_time_df = incontext_time_df.append(time_df)
 
+        if week in [3, 4] and n > 4:
+            break
+
     return incontext_time_df
 
 
@@ -66,6 +69,25 @@ incontext_times = incontext_times.append(
         coder=4,
     )
 )
+
+# Week 3
+incontext_times = incontext_times.append(
+    extract_times_in_context(folder_path="Week 4a Coder 1 In-Context/", week=3, coder=1)
+)
+
+incontext_times = incontext_times.append(
+    extract_times_in_context(folder_path="Week 4a Coder 3 In-Context/", week=3, coder=3)
+)
+
+# Week 4
+incontext_times = incontext_times.append(
+    extract_times_in_context(folder_path="Week 4b Coder 2 In-Context/", week=4, coder=2)
+)
+
+incontext_times = incontext_times.append(
+    extract_times_in_context(folder_path="Week 4b Coder 4 In-Context/", week=4, coder=4)
+)
+
 
 incontext_total_time = (
     incontext_times[["coder", "week", "seconds"]].groupby(by=["week", "coder"]).sum()
@@ -128,6 +150,33 @@ outcontext_time = outcontext_time.append(
 )
 
 
+# Week 3
+outcontext_time = outcontext_time.append(
+    extract_time_out_context(
+        folder_path="Week 4a Coder 2 Out-of-Context/", week=3, coder=2
+    )
+)
+
+outcontext_time = outcontext_time.append(
+    extract_time_out_context(
+        folder_path="Week 4a Coder 4 Out-of-Context/", week=3, coder=4
+    )
+)
+
+# Week 4
+outcontext_time = outcontext_time.append(
+    extract_time_out_context(
+        folder_path="Week 4b Coder 1 Out-of-Context/", week=4, coder=1
+    )
+)
+
+outcontext_time = outcontext_time.append(
+    extract_time_out_context(
+        folder_path="Week 4b Coder 3 Out-of-Context/", week=4, coder=3
+    )
+)
+
+
 outcontext_total_time = (
     outcontext_time[["coder", "week", "seconds"]].groupby(by=["week", "coder"]).sum()
 )
@@ -136,6 +185,7 @@ outcontext_total_time = outcontext_total_time.reset_index()
 outcontext_total_time["context"] = "out"
 
 time = incontext_total_time.append(outcontext_total_time)
+time.to_csv(start.DATA_PATH + "clean/" + "times.csv")
 
 # %%
 time["week"] = np.where(
