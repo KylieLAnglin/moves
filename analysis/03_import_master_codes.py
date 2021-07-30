@@ -45,11 +45,9 @@ def import_incontext(folder_path: str):
             folder_path + "Transcript" + str(transcript) + ".xlsx",
             skiprows=2,
         )
-        print(len(df))
         transcript_df = transcript_df.append(df)
 
     for n in list(range(1, 9)):
-        print(moves[n - 1])
         move_num = "move" + str(n)
         transcript_df[move_num] = np.where(
             transcript_df[["Move 1", "Move 2", "Move 3", "Move 4", "Move 5"]]
@@ -65,6 +63,17 @@ def import_incontext(folder_path: str):
 master_codes = import_incontext(folder_path=MASTER_FILES)
 
 # %% Merge with coder files
+final_full = pd.DataFrame(
+    columns=[
+        "ID",
+        "week",
+        "incontext_a",
+        "incontext_b",
+        "outcontext_a",
+        "outcontext_b",
+        "master",
+    ]
+)
 for n in list(range(len(moves))):
     move_n = n + 1
 
@@ -74,5 +83,10 @@ for n in list(range(len(moves))):
         master_codes[["ID", move_column]].rename(columns={move_column: "master"})
     )
     final.to_csv(start.DATA_PATH + "clean/" + moves[n] + " Final" + ".csv", index=False)
+    final["move"] = move_n
+    final["move_label"] = moves[n]
+    final_full = final_full.append(final)
+
+final_full.to_csv(start.DATA_PATH + "clean/" + "final_full.csv", index=False)
 
 # %%
