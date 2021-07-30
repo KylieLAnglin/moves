@@ -11,3 +11,4 @@ IRR_PATH = (
 TRANSCRIPTS_PATH = SHARED_PATH + "uncoded transcripts/"
 
 DATA_PATH = HOME + "Dropbox/Active/moves/data/"
+RESULTS_PATH = HOME + "Dropbox/Active/moves/results/"
