@@ -21,6 +21,10 @@ folder_path = "Week 1 Coder 1 In-Context/"
 
 
 def import_incontext(folder_path: str, week: int, coder: int):
+    if week == 1 or week == 2:
+        transcript_ns = list(range(1, 11))
+    if week == 3 or week == 4:
+        transcript_ns = list(range(1, 6))
     transcript_df = pd.DataFrame(
         columns=[
             "ID",
@@ -34,7 +38,7 @@ def import_incontext(folder_path: str, week: int, coder: int):
             "Mark as Question",
         ]
     )
-    for transcript in list(range(1, 11)):
+    for transcript in transcript_ns:
         df = pd.read_excel(
             start.SHARED_PATH
             + "coding/"
@@ -46,6 +50,8 @@ def import_incontext(folder_path: str, week: int, coder: int):
         ).rename(columns={"ID 3": "ID", "ID 3 ": "ID"})
         print(len(df))
         transcript_df = transcript_df.append(df)
+        if week in [3, 4] and transcript > 4:
+            break
     transcript_df["week"] = week
     transcript_df["coder"] = coder
 
@@ -60,6 +66,7 @@ def import_incontext(folder_path: str, week: int, coder: int):
             0,
         )
     transcript_df = transcript_df[transcript_df.Speaker == "Coach"]
+
     return transcript_df
 
 
@@ -80,7 +87,23 @@ week2_coder4 = import_incontext(
     folder_path="Week 2 Coder 4 In-Context/", week=2, coder=4
 )
 
-incontext_a = week1_coder1.append(week2_coder2)[
+week3_coder1 = import_incontext(
+    folder_path="Week 4a Coder 1 In-Context/", week=3, coder=1
+)
+
+week3_coder3 = import_incontext(
+    folder_path="Week 4a Coder 3 In-Context/", week=3, coder=3
+)
+
+week4_coder2 = import_incontext(
+    folder_path="Week 4b Coder 2 In-Context/", week=4, coder=2
+)
+
+week4_coder4 = import_incontext(
+    folder_path="Week 4b Coder 4 In-Context/", week=4, coder=4
+)
+
+incontext_a = pd.concat([week1_coder1, week2_coder2, week3_coder1, week4_coder2])[
     [
         "ID",
         "week",
@@ -95,8 +118,7 @@ incontext_a = week1_coder1.append(week2_coder2)[
         "move8",
     ]
 ]
-
-incontext_b = week1_coder3.append(week2_coder4)[
+incontext_b = pd.concat([week1_coder3, week2_coder4, week3_coder3, week4_coder4])[
     [
         "ID",
         "week",
@@ -111,7 +133,6 @@ incontext_b = week1_coder3.append(week2_coder4)[
         "move8",
     ]
 ]
-
 # %% Merge out of context files
 def import_outcontext(folder_path: str, week: int, coder: int):
     move = moves[0]
@@ -154,8 +175,24 @@ week2_coder3 = import_outcontext(
     folder_path="Week 2 Coder 3 Out-of-Context/", week=2, coder=3
 )
 
-outcontext_a = week1_coder2.append(week2_coder1)
-outcontext_b = week1_coder4.append(week2_coder3)
+week3_coder2 = import_outcontext(
+    folder_path="Week 4a Coder 2 Out-of-Context/", week=3, coder=2
+)
+
+week3_coder4 = import_outcontext(
+    folder_path="Week 4a Coder 4 Out-of-Context/", week=3, coder=4
+)
+
+week4_coder1 = import_outcontext(
+    folder_path="Week 4b Coder 1 Out-of-Context/", week=4, coder=1
+)
+
+week4_coder3 = import_outcontext(
+    folder_path="Week 4b Coder 3 Out-of-Context/", week=4, coder=3
+)
+
+outcontext_a = pd.concat([week1_coder2, week2_coder1, week3_coder2, week4_coder1])
+outcontext_b = pd.concat([week1_coder4, week2_coder3, week3_coder4, week4_coder3])
 
 # %%
 def merge_coders(move: str):
