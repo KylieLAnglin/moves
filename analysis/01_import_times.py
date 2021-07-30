@@ -10,7 +10,9 @@ from moves.library import start
 
 
 def extract_times_in_context(folder_path: str, week: int, coder: int):
-    incontext_time_df = pd.DataFrame(columns=["week", "coder", "transcript", "seconds"])
+    incontext_time_df = pd.DataFrame(
+        columns=["week", "coder", "transcript", "seconds", "utterances"]
+    )
 
     for n in list(range(1, 11)):
         time_df = pd.read_excel(
@@ -25,6 +27,20 @@ def extract_times_in_context(folder_path: str, week: int, coder: int):
         time_df["coder"] = coder
         time_df["transcript"] = n
         time_df["seconds"] = time_df.Minutes * 60 + time_df.Seconds
+
+        len_df = pd.read_excel(
+            start.SHARED_PATH
+            + "coding/"
+            + folder_path
+            + "Transcript"
+            + str(n)
+            + ".xlsx",
+            skiprows=2,
+        )
+        time_df["utterances"] = len(
+            len_df[(len_df.Speaker == "Coach") | (len_df.Speaker == "Chong")]
+        )
+
         incontext_time_df = incontext_time_df.append(time_df)
 
         if week in [3, 4] and n > 4:
@@ -90,7 +106,9 @@ incontext_times = incontext_times.append(
 
 
 incontext_total_time = (
-    incontext_times[["coder", "week", "seconds"]].groupby(by=["week", "coder"]).sum()
+    incontext_times[["coder", "week", "seconds", "utterances"]]
+    .groupby(by=["week", "coder"])
+    .sum()
 )
 
 incontext_total_time = incontext_total_time.reset_index()
@@ -120,6 +138,11 @@ def extract_time_out_context(folder_path: str, week: int, coder: int):
         time_df["move"] = move
         time_df["seconds"] = time_df.Minutes * 60 + time_df.Seconds
         outcontext_time_df = outcontext_time_df.append(time_df)
+
+    len_df = pd.read_excel(
+        start.SHARED_PATH + "coding/" + folder_path + move + ".xlsx", skiprows=2
+    )
+    outcontext_time_df["utterances"] = len(len_df)
 
     return outcontext_time_df
 
@@ -178,41 +201,15 @@ outcontext_time = outcontext_time.append(
 
 
 outcontext_total_time = (
-    outcontext_time[["coder", "week", "seconds"]].groupby(by=["week", "coder"]).sum()
+    outcontext_time[["coder", "week", "seconds", "utterances"]]
+    .groupby(by=["week", "coder", "utterances"])
+    .sum()
 )
 
 outcontext_total_time = outcontext_total_time.reset_index()
 outcontext_total_time["context"] = "out"
 
 time = incontext_total_time.append(outcontext_total_time)
+time["seconds_per_100"] = (time.seconds/time.utterances)*100
+
 time.to_csv(start.DATA_PATH + "clean/" + "times.csv")
-
-# %%
-time["week"] = np.where(
-    (((time.week == 1) & (time.context == "out"))), time.week + 1, time.week
-)
-
-time["week"] = np.where(
-    (((time.week == 2) & (time.context == "in"))), time.week + 1, time.week
-)
-# %%
-plt.style.use("seaborn")
-
-fig, ax = plt.subplots()
-
-for coder in range(5):
-    ax.plot(
-        time[(time.coder == coder)].week,
-        time[(time.coder == coder)].seconds / 60,
-        color="black",
-    )
-
-
-plt.xlabel("Week")
-plt.ylabel("Minutes")
-plt.xticks([1, 2, 3, 4], labels=["in", "out", "in", "out"])
-ax.legend()
-plt.show()
-
-
-# %%
