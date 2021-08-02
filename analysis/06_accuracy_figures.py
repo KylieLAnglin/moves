@@ -16,7 +16,7 @@ df_wide = pd.read_csv(start.DATA_PATH + "clean/final_wide.csv")
 
 
 df_summary = (
-    df[["week", "coder", "context", "precision", "recall", "accuracy", "code"]]
+    df_long[["week", "coder", "context", "precision", "recall", "accuracy", "code"]]
     .groupby(by=["week", "coder", "context"])
     .mean()
 )
@@ -111,76 +111,3 @@ plt.ylabel("Coder Agreement")
 plt.ylim(0.9, 1)
 plt.xticks([1, 2, 3, 4, 5], labels=["In", "Out", "In", "Out", "In"])
 plt.savefig(start.RESULTS_PATH + "single_case_agreement")
-
-# %% Accuracy
-df_full["in_context"] = np.where(df_full.context == "in", 1, 0)
-
-file = "/Users/kylie/Dropbox/Active/moves/results/main_results.xlsx"
-wb = load_workbook(file)
-ws = wb.active
-
-
-def reg_to_excel(df: pd.DataFrame, outcome: str, start_row: int, start_col: int):
-    df = df.rename(columns={outcome: "outcome"})
-
-    x_list = [
-        "in_context",
-        "C(week)[T.2]",
-        "C(week)[T.3]",
-        "C(week)[T.4]",
-        "C(coder)[T.2]",
-        "C(coder)[T.3]",
-        "C(coder)[T.4]",
-    ]
-
-    formula = "outcome ~ in_context + C(week) + C(coder) + C(move)"
-    result = smf.ols(formula, data=df).fit(
-        cov_type="cluster", cov_kwds={"groups": df["ID"]}, use_t=False
-    )
-
-    col_n = start_col
-    row_n = start_row
-    for x in x_list:
-        p = result.pvalues[x]
-        coef = result.params[x].round(3)
-        if p >= 0.05:
-            coef = str(coef)
-        if p < 0.05 and p > 0.01:
-            coef = str(coef) + "*"
-        if p < 0.01 and p > 0.001:
-            coef = str(coef) + "**"
-        if p < 0.001:
-            coef = str(coef) + "***"
-        ws.cell(row=row_n, column=col_n).value = coef
-        row_n = row_n + 1
-        ws.cell(row=row_n, column=col_n).value = "(" + str(result.bse[x].round(3)) + ")"
-        row_n = row_n + 1
-
-        wb.save(file)
-
-    return result.summary()
-
-
-# %%
-
-reg_to_excel(df=df_full, outcome="accuracy", start_row=3, start_col=2)
-reg_to_excel(
-    df=df_full.dropna(subset=["precision"]),
-    outcome="precision",
-    start_row=3,
-    start_col=3,
-)
-reg_to_excel(
-    df=df_full.dropna(subset=["recall"]),
-    outcome="recall",
-    start_row=3,
-    start_col=4,
-)
-reg_to_excel(
-    df=df_full.dropna(subset=["code"]),
-    outcome="code",
-    start_row=3,
-    start_col=5,
-)
-
-# %%
