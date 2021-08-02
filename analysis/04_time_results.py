@@ -15,11 +15,31 @@ plt.style.use("seaborn")
 
 fig, ax = plt.subplots()
 
-ax.plot(df[df.coder == 1].week, df[df.coder == 1].seconds_per_100 / 60, color="black")
-ax.plot(df[df.coder == 3].week, df[df.coder == 3].seconds_per_100 / 60, color="black")
+ax.plot(
+    df[df.coder == 1].week,
+    df[df.coder == 1].seconds_per_100 / 60,
+    color="black",
+    linestyle="solid",
+)
+ax.plot(
+    df[df.coder == 3].week,
+    df[df.coder == 3].seconds_per_100 / 60,
+    color="black",
+    linestyle="dashed",
+)
 
-ax.plot([2, 3, 4, 5], df[df.coder == 2].seconds_per_100 / 60, color="gray")
-ax.plot([2, 3, 4, 5], df[df.coder == 4].seconds_per_100 / 60, color="gray")
+ax.plot(
+    [2, 3, 4, 5],
+    df[df.coder == 2].seconds_per_100 / 60,
+    color="gray",
+    linestyle="solid",
+)
+ax.plot(
+    [2, 3, 4, 5],
+    df[df.coder == 4].seconds_per_100 / 60,
+    color="gray",
+    linestyle="dashed",
+)
 
 plt.xlabel("Context")
 plt.ylabel("Minutes")
