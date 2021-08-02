@@ -87,6 +87,6 @@ for n in list(range(len(moves))):
     final["move_label"] = moves[n]
     final_full = final_full.append(final)
 
-final_full.to_csv(start.DATA_PATH + "clean/" + "final_full.csv", index=False)
+final_full.to_csv(start.DATA_PATH + "clean/" + "final_wide.csv", index=False)
 
 # %%
