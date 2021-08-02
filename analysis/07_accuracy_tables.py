@@ -1,7 +1,6 @@
 # %%
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 from openpyxl import load_workbook
 
 
@@ -24,7 +23,6 @@ df_summary = (
 summary = df_summary.groupby(["context"]).mean()
 
 # %% Accuracy
-df_long["in_context"] = np.where(df_long.context == "in", 1, 0)
 
 file = start.RESULTS_PATH + "main_results.xlsx"
 wb = load_workbook(file)
@@ -44,10 +42,11 @@ def reg_to_excel(df: pd.DataFrame, outcome: str, start_row: int, start_col: int)
         "C(coder)[T.4]",
     ]
 
-    formula = "outcome ~ in_context + C(week) + C(coder) + C(move)"
+    formula = "outcome ~ in_context + C(move) + C(week) + C(coder)"
     result = smf.ols(formula, data=df).fit(
         cov_type="cluster", cov_kwds={"groups": df["ID"]}, use_t=False
     )
+    print(result.summary())
 
     col_n = start_col
     row_n = start_row
