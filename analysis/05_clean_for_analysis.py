@@ -79,4 +79,4 @@ df_full["recall"] = np.where(
 df_full["accuracy"] = np.where(df_full.code == df_full.master, 1, 0)
 
 
-df_full.to_csv(start.DATA_PATH + "clean/" + "final_wide.csv", index=False)
+df_full.to_csv(start.DATA_PATH + "clean/" + "final_long.csv", index=False)
