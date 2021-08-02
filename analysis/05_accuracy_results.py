@@ -11,7 +11,8 @@ import statsmodels.formula.api as smf
 from moves.library import start
 
 # %%
-df = pd.read_csv(start.DATA_PATH + "clean/final_long.csv")
+df_long = pd.read_csv(start.DATA_PATH + "clean/final_long.csv")
+df_wide = pd.read_csv(start.DATA_PATH + "clean/final_wide.csv")
 
 
 df_summary = (
@@ -81,12 +82,12 @@ myplot("recall", "Recall", saveas="single_case_recall.png", ymin=0.5, ymax=1)
 
 # %% Coder aggrement
 
-incontext = df[["ID", "week", "incontext_a", "incontext_b"]]
+incontext = df_wide[["ID", "week", "incontext_a", "incontext_b"]]
 incontext["agree"] = np.where(incontext.incontext_a == incontext.incontext_b, 1, 0)
 
 incontext_summary = incontext[["week", "agree"]].groupby(by=["week"]).mean()
 
-outcontext = df[["ID", "week", "outcontext_a", "outcontext_b"]]
+outcontext = df_wide[["ID", "week", "outcontext_a", "outcontext_b"]]
 outcontext["agree"] = np.where(outcontext.outcontext_a == outcontext.outcontext_b, 1, 0)
 
 outcontext_summary = outcontext[["week", "agree"]].groupby(by=["week"]).mean()
