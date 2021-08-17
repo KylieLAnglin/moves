@@ -1,6 +1,7 @@
 # %%
 
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 
 from moves.library import start
@@ -10,6 +11,7 @@ time = pd.read_csv(start.DATA_PATH + "clean/" + "times.csv")
 
 # %%
 df = time.sort_values(by="week")
+df["seconds_per_utterance"] = df.seconds / df.utterances
 
 plt.style.use("seaborn")
 
@@ -17,36 +19,113 @@ fig, ax = plt.subplots()
 
 ax.plot(
     df[df.coder == 1].week,
-    df[df.coder == 1].seconds_per_100 / 60,
+    df[df.coder == 1].seconds_per_utterance,
     color="black",
     linestyle="solid",
 )
 ax.plot(
     df[df.coder == 3].week,
-    df[df.coder == 3].seconds_per_100 / 60,
+    df[df.coder == 3].seconds_per_utterance,
     color="black",
     linestyle="dashed",
 )
 
 ax.plot(
     [2, 3, 4, 5],
-    df[df.coder == 2].seconds_per_100 / 60,
+    df[df.coder == 2].seconds_per_utterance,
     color="gray",
     linestyle="solid",
 )
 ax.plot(
     [2, 3, 4, 5],
-    df[df.coder == 4].seconds_per_100 / 60,
+    df[df.coder == 4].seconds_per_utterance,
+    color="gray",
+    linestyle="dashed",
+)
+
+plt.xlabel("Context")
+plt.ylabel("Seconds")
+# plt.ylim(0, 240)
+plt.xticks([1, 2, 3, 4, 5], labels=["In", "Out", "In", "Out", "In"])
+ax.legend()
+# plt.yticks([0, 30, 60, 90, 120, 150, 180, 210, 240])
+plt.savefig(start.RESULTS_PATH + "single_case_time.png")
+
+# %%
+time_in_context = df[df.context == "in"]
+
+time_out_context = df[df.context == "out"]
+
+print(time_in_context.seconds_per_10.mean())  # 59 min 7 seconds
+print(time_out_context.seconds_per_10.mean())  # 113 min 54 seconds
+
+print(time_out_context.seconds_per_10.mean() - time_in_context.seconds_per_10.mean())
+# %%
+
+df_one_move_out_context = df
+df_one_move_out_context["adjusted_seconds_per_utterance"] = np.where(
+    df_one_move_out_context.context == "out",
+    df_one_move_out_context.seconds_per_utterance / 8,
+    df_one_move_out_context.seconds_per_utterance,
+)
+
+
+# %%
+plt.style.use("seaborn")
+
+fig, ax = plt.subplots()
+
+ax.plot(
+    df_one_move_out_context[df_one_move_out_context.coder == 1].week,
+    df_one_move_out_context[
+        df_one_move_out_context.coder == 1
+    ].adjusted_seconds_per_utterance,
+    color="black",
+    linestyle="solid",
+)
+ax.plot(
+    df_one_move_out_context[df_one_move_out_context.coder == 3].week,
+    df_one_move_out_context[
+        df_one_move_out_context.coder == 3
+    ].adjusted_seconds_per_utterance,
+    color="black",
+    linestyle="dashed",
+)
+
+ax.plot(
+    [2, 3, 4, 5],
+    df_one_move_out_context[
+        df_one_move_out_context.coder == 2
+    ].adjusted_seconds_per_utterance,
+    color="gray",
+    linestyle="solid",
+)
+ax.plot(
+    [2, 3, 4, 5],
+    df_one_move_out_context[
+        df_one_move_out_context.coder == 4
+    ].adjusted_seconds_per_utterance,
     color="gray",
     linestyle="dashed",
 )
 
 plt.xlabel("Context")
 plt.ylabel("Minutes")
-plt.ylim(0, 240)
+# plt.ylim(0, 240)
 plt.xticks([1, 2, 3, 4, 5], labels=["In", "Out", "In", "Out", "In"])
 ax.legend()
-plt.yticks([0, 30, 60, 90, 120, 150, 180, 210, 240])
-plt.savefig(start.RESULTS_PATH + "single_case_time.png")
+# plt.yticks([0, 30, 60, 90, 120, 150, 180, 210, 240])
+plt.savefig(start.RESULTS_PATH + "single_case_time_per_code.png")
 
+
+print(
+    df_one_move_out_context[
+        df_one_move_out_context.context == "in"
+    ].adjusted_seconds_per_utterance.mean()
+)
+print(
+    df_one_move_out_context[
+        df_one_move_out_context.context == "out"
+    ].adjusted_seconds_per_utterance.mean()
+)
 # %%
