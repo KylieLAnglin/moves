@@ -14,13 +14,53 @@ df_long = pd.read_csv(start.DATA_PATH + "clean/final_long.csv")
 df_wide = pd.read_csv(start.DATA_PATH + "clean/final_wide.csv")
 
 
-df_summary = (
+df_agg_moves = (
     df_long[["week", "coder", "context", "precision", "recall", "accuracy", "code"]]
     .groupby(by=["week", "coder", "context"])
     .mean()
 )
 
-summary = df_summary.groupby(["context"]).mean()
+df_agg_within_week = df_agg_moves.groupby(by=["week", "context"]).mean()
+
+
+def print_summary(filename: str, statistic: str):
+
+    file = start.RESULTS_PATH + filename
+    wb = load_workbook(file)
+    ws = wb.active
+
+    start_row = 3
+
+    row_n = start_row
+    ins = []
+    outs = []
+    diffs = []
+
+    for week in [1, 2, 3, 4]:
+        in_value = df_agg_within_week.loc[(week, "in"), statistic]
+        ins.append(in_value)
+        out_value = df_agg_within_week.loc[(week, "out"), statistic]
+        outs.append(out_value)
+        ws.cell(row=row_n, column=2).value = in_value
+        ws.cell(row=row_n, column=3).value = out_value
+        diff = in_value - out_value
+        diffs.append(diff)
+        ws.cell(row=row_n, column=4).value = diff
+        row_n = row_n + 1
+
+    ws.cell(row=row_n, column=2).value = sum(ins) / len(ins)
+    ws.cell(row=row_n, column=3).value = sum(outs) / len(outs)
+    ws.cell(row=row_n, column=4).value = sum(diffs) / len(diffs)
+
+    wb.save(file)
+
+
+print_summary("accuracy_by_week.xlsx", "accuracy")
+print_summary("precision_by_week.xlsx", "precision")
+print_summary("recall_by_week.xlsx", "recall")
+
+
+df_agg = df_summary.groupby(["context"]).mean()
 
 # %% Accuracy
 
