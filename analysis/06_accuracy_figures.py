@@ -35,30 +35,38 @@ def myplot(outcome: str, ylabel: str, saveas: str, ymin, ymax):
         df_summary.xs(1, level=1, drop_level=False)[outcome],
         color="black",
         linestyle="solid",
+        label="Coder 1",
     )
-    ax.plot(
-        [1, 2, 3, 4],
-        df_summary.xs(3, level=1, drop_level=False)[outcome],
-        color="black",
-        linestyle="dashed",
-    )
+
     ax.plot(
         [2, 3, 4, 5],
         df_summary.xs(2, level=1, drop_level=False)[outcome],
         color="gray",
         linestyle="solid",
+        label="Coder 2",
     )
+
+    ax.plot(
+        [1, 2, 3, 4],
+        df_summary.xs(3, level=1, drop_level=False)[outcome],
+        color="black",
+        linestyle="dashed",
+        label="Coder 3",
+    )
+
     ax.plot(
         [2, 3, 4, 5],
         df_summary.xs(4, level=1, drop_level=False)[outcome],
         color="gray",
         linestyle="dashed",
+        label="Coder 4",
     )
 
     plt.xlabel("Context")
     plt.ylabel(ylabel)
     plt.ylim(ymin, ymax)
     plt.xticks([1, 2, 3, 4, 5], labels=["In", "Out", "In", "Out", "In"])
+    plt.legend()
     plt.savefig(start.RESULTS_PATH + saveas)
 
 
