@@ -22,25 +22,32 @@ ax.plot(
     df[df.coder == 1].seconds_per_utterance,
     color="black",
     linestyle="solid",
+    label="Coder 1",
 )
-ax.plot(
-    df[df.coder == 3].week,
-    df[df.coder == 3].seconds_per_utterance,
-    color="black",
-    linestyle="dashed",
-)
+
 
 ax.plot(
     [2, 3, 4, 5],
     df[df.coder == 2].seconds_per_utterance,
     color="gray",
     linestyle="solid",
+    label="Coder 2",
 )
+
+ax.plot(
+    df[df.coder == 3].week,
+    df[df.coder == 3].seconds_per_utterance,
+    color="black",
+    linestyle="dashed",
+    label="Coder 3",
+)
+
 ax.plot(
     [2, 3, 4, 5],
     df[df.coder == 4].seconds_per_utterance,
     color="gray",
     linestyle="dashed",
+    label="Coder 4",
 )
 
 plt.xlabel("Context")
@@ -82,15 +89,9 @@ ax.plot(
     ].adjusted_seconds_per_utterance,
     color="black",
     linestyle="solid",
+    label="Coder 1",
 )
-ax.plot(
-    df_one_move_out_context[df_one_move_out_context.coder == 3].week,
-    df_one_move_out_context[
-        df_one_move_out_context.coder == 3
-    ].adjusted_seconds_per_utterance,
-    color="black",
-    linestyle="dashed",
-)
+
 
 ax.plot(
     [2, 3, 4, 5],
@@ -99,7 +100,19 @@ ax.plot(
     ].adjusted_seconds_per_utterance,
     color="gray",
     linestyle="solid",
+    label="Coder 2",
 )
+
+ax.plot(
+    df_one_move_out_context[df_one_move_out_context.coder == 3].week,
+    df_one_move_out_context[
+        df_one_move_out_context.coder == 3
+    ].adjusted_seconds_per_utterance,
+    color="black",
+    linestyle="dashed",
+    label="Coder 3",
+)
+
 ax.plot(
     [2, 3, 4, 5],
     df_one_move_out_context[
@@ -107,6 +120,7 @@ ax.plot(
     ].adjusted_seconds_per_utterance,
     color="gray",
     linestyle="dashed",
+    label="Coder 4",
 )
 
 plt.xlabel("Context")
