@@ -17,6 +17,8 @@ df_agg_moves = (
 df_agg_weeks = df_agg_moves.groupby(by=["coder", "context"]).mean()
 # %%
 
+df_long["phase"] = np.where(((df_long.week == 1) | (df_long.week == 2)), 1, 2)
+
 
 def table_by_coder(filename: str, statistic: str, df=pd.DataFrame):
 
@@ -29,12 +31,8 @@ def table_by_coder(filename: str, statistic: str, df=pd.DataFrame):
     row_num = 2
     for coder in [1, 2, 3, 4]:
 
-        formula = statistic + " ~ in_context"
-        result = smf.ols(formula, data=df[df.coder == coder]).fit(
-            cov_type="cluster",
-            cov_kwds={"groups": df[df.coder == coder]["ID"]},
-            use_t=False,
-        )
+        formula = statistic + " ~ in_context + C(phase)"
+        result = smf.ols(formula, data=df[df.coder == coder]).fit()
         print(result.summary())
 
         ws.cell(row=row_num, column=2).value = (
@@ -49,15 +47,12 @@ def table_by_coder(filename: str, statistic: str, df=pd.DataFrame):
     wb.save(file)
 
 
+# %%
 table_by_coder(filename="accuracy_by_coder.xlsx", statistic="accuracy", df=df_long)
 table_by_coder(filename="precision_by_coder.xlsx", statistic="precision", df=df_long)
 table_by_coder(filename="recall_by_coder.xlsx", statistic="recall", df=df_long)
 
 # %%
-
-file = start.RESULTS_PATH + "accuracy_by_coder.xlsx"
-wb = load_workbook(file)
-ws = wb.active
 
 
 def reg_to_excel(df: pd.DataFrame, outcome: str, start_row: int, start_col: int):
