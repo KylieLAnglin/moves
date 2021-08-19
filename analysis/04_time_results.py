@@ -16,58 +16,6 @@ df = time.sort_values(by="week")
 
 plt.style.use("seaborn")
 
-# %% Group A Graph
-fig, (ax1, ax2) = plt.subplots(1, 2)
-
-ax1.plot(
-    df[df.coder == 1].week,
-    df[df.coder == 1].seconds_per_utterance,
-    color="black",
-    linestyle="solid",
-    label="Coder 1",
-)
-
-
-ax1.plot(
-    df[df.coder == 3].week,
-    df[df.coder == 3].seconds_per_utterance,
-    color="black",
-    linestyle="dashed",
-    label="Coder 3",
-)
-ax1.set_xticks([1, 2, 3, 4])
-ax1.set_xticklabels(["Complex", "Simple", "Complex", "Simple"])
-ax1.set_ylim(0, 120)
-
-
-ax2.plot(
-    df[df.coder == 2].week,
-    df[df.coder == 2].seconds_per_utterance,
-    color="gray",
-    linestyle="solid",
-    label="Coder 2",
-)
-
-
-ax2.plot(
-    df[df.coder == 4].week,
-    df[df.coder == 4].seconds_per_utterance,
-    color="gray",
-    linestyle="dashed",
-    label="Coder 4",
-)
-ax2.set_xticks([1, 2, 3, 4])
-ax2.set_xticklabels(["Simple", "Complex", "Simple", "Complex"])
-ax2.set_ylim(0, 120)
-
-
-plt.xlabel("Coding Scheme")
-plt.ylabel("Seconds")
-ax1.legend()
-ax2.legend()
-
-plt.show()
-
 # %%
 
 fig, ax = plt.subplots()
