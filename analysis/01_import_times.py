@@ -208,6 +208,7 @@ outcontext_total_time = outcontext_total_time.reset_index()
 outcontext_total_time["context"] = "out"
 
 time = incontext_total_time.append(outcontext_total_time)
+time["seconds_per_utterance"] = time.seconds / time.utterances
 time["seconds_per_10"] = (time.seconds / time.utterances) * 10
 
 time.to_csv(start.DATA_PATH + "clean/" + "times.csv")
