@@ -124,7 +124,7 @@ ax.plot(
 )
 
 plt.xlabel("Context")
-plt.ylabel("Minutes")
+plt.ylabel("Seconds")
 # plt.ylim(0, 240)
 plt.xticks([1, 2, 3, 4, 5], labels=["In", "Out", "In", "Out", "In"])
 ax.legend()
