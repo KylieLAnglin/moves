@@ -89,35 +89,3 @@ myplot("recall", "Recall", saveas="single_case_recall.png", ymin=0.5, ymax=1)
 
 # 4:
 # I preferred out of context transcripts as I felt it was easier to tell whether a code was present or not rather than trying to figure out which codes were present (like for in-context).
-
-# %% Coder aggrement
-
-incontext = df_wide[["ID", "week", "incontext_a", "incontext_b"]]
-incontext["agree"] = np.where(incontext.incontext_a == incontext.incontext_b, 1, 0)
-
-incontext_summary = incontext[["week", "agree"]].groupby(by=["week"]).mean()
-
-outcontext = df_wide[["ID", "week", "outcontext_a", "outcontext_b"]]
-outcontext["agree"] = np.where(outcontext.outcontext_a == outcontext.outcontext_b, 1, 0)
-
-outcontext_summary = outcontext[["week", "agree"]].groupby(by=["week"]).mean()
-
-fig, ax = plt.subplots()
-ax.plot(
-    [1, 2, 3, 4],
-    incontext_summary.agree,
-    color="black",
-    linestyle="solid",
-)
-ax.plot(
-    [2, 3, 4, 5],
-    outcontext_summary.agree,
-    color="gray",
-    linestyle="solid",
-)
-
-plt.xlabel("Context")
-plt.ylabel("Coder Agreement")
-plt.ylim(0.9, 1)
-plt.xticks([1, 2, 3, 4, 5], labels=label_list)
-plt.savefig(start.RESULTS_PATH + "single_case_agreement")
