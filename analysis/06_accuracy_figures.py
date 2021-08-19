@@ -10,6 +10,8 @@ import statsmodels.formula.api as smf
 
 from moves.library import start
 
+label_list = ["Complex", "Simple", "Complex", "Simple", "Complex"]
+
 # %%
 df_long = pd.read_csv(start.DATA_PATH + "clean/final_long.csv")
 df_wide = pd.read_csv(start.DATA_PATH + "clean/final_wide.csv")
@@ -65,7 +67,7 @@ def myplot(outcome: str, ylabel: str, saveas: str, ymin, ymax):
     plt.xlabel("Context")
     plt.ylabel(ylabel)
     plt.ylim(ymin, ymax)
-    plt.xticks([1, 2, 3, 4, 5], labels=["In", "Out", "In", "Out", "In"])
+    plt.xticks([1, 2, 3, 4, 5], labels=label_list)
     plt.legend()
     plt.savefig(start.RESULTS_PATH + saveas)
 
@@ -117,5 +119,5 @@ ax.plot(
 plt.xlabel("Context")
 plt.ylabel("Coder Agreement")
 plt.ylim(0.9, 1)
-plt.xticks([1, 2, 3, 4, 5], labels=["In", "Out", "In", "Out", "In"])
+plt.xticks([1, 2, 3, 4, 5], labels=label_list)
 plt.savefig(start.RESULTS_PATH + "single_case_agreement")

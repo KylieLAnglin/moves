@@ -10,6 +10,8 @@ time = pd.read_csv(start.DATA_PATH + "clean/" + "times.csv")
 
 
 # %%
+label_list = ["Complex", "Simple", "Complex", "Simple", "Complex"]
+
 df = time.sort_values(by="week")
 df["seconds_per_utterance"] = df.seconds / df.utterances
 
@@ -50,10 +52,10 @@ ax.plot(
     label="Coder 4",
 )
 
-plt.xlabel("Context")
+plt.xlabel("Coding Scheme")
 plt.ylabel("Seconds")
 # plt.ylim(0, 240)
-plt.xticks([1, 2, 3, 4, 5], labels=["In", "Out", "In", "Out", "In"])
+plt.xticks([1, 2, 3, 4, 5], labels=label_list)
 ax.legend()
 # plt.yticks([0, 30, 60, 90, 120, 150, 180, 210, 240])
 plt.savefig(start.RESULTS_PATH + "single_case_time.png")
@@ -123,10 +125,10 @@ ax.plot(
     label="Coder 4",
 )
 
-plt.xlabel("Context")
+plt.xlabel("Coding Scheme")
 plt.ylabel("Seconds")
 # plt.ylim(0, 240)
-plt.xticks([1, 2, 3, 4, 5], labels=["In", "Out", "In", "Out", "In"])
+plt.xticks([1, 2, 3, 4, 5], labels=label_list)
 ax.legend()
 # plt.yticks([0, 30, 60, 90, 120, 150, 180, 210, 240])
 plt.savefig(start.RESULTS_PATH + "single_case_time_per_code.png")
