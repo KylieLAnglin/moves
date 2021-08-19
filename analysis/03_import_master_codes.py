@@ -87,6 +87,14 @@ for n in list(range(len(moves))):
     final["move_label"] = moves[n]
     final_full = final_full.append(final)
 
-final_full.to_csv(start.DATA_PATH + "clean/" + "final_wide.csv", index=False)
+# %% Add transcript ID
+utterance_id = pd.read_csv(start.SHARED_PATH + "/utterance_id.csv")
+
+final_wide = final_full.merge(
+    utterance_id[["id", "doc"]], left_on="ID", right_on="id", indicator=True
+)
+# %%
+
+final_wide.to_csv(start.DATA_PATH + "clean/" + "final_wide.csv", index=False)
 
 # %%
