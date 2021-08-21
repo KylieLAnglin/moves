@@ -4,6 +4,9 @@ pandas
 ipykernel
 python-docx
 openpyxl
+spacy==2.3.5
+
+
 
 # formatting
 black
