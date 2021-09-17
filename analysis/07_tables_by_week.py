@@ -22,7 +22,7 @@ df_agg_moves = (
 
 df_agg_within_week = df_agg_moves.groupby(by=["week", "context"]).mean()
 
-
+# %%
 def print_summary(filename: str, statistic: str):
 
     file = start.RESULTS_PATH + filename
@@ -60,9 +60,46 @@ print_summary("precision_by_week.xlsx", "precision")
 print_summary("recall_by_week.xlsx", "recall")
 
 
-df_agg = df_summary.groupby(["context"]).mean()
-
 # %% Accuracy
+df_long["simple_scheme"] = np.where(df_long.in_context == 0, 1, 0)
+
+df_long["simple_coder1"] = np.where(
+    (df_long.simple_scheme == 1) & (df_long.coder == 1), 1, 0
+)
+
+df_long["simple_coder2"] = np.where(
+    (df_long.simple_scheme == 1) & (df_long.coder == 2), 1, 0
+)
+
+df_long["simple_coder3"] = np.where(
+    (df_long.simple_scheme == 1) & (df_long.coder == 3), 1, 0
+)
+
+df_long["simple_coder4"] = np.where(
+    (df_long.simple_scheme == 1) & (df_long.coder == 4), 1, 0
+)
+
+# %%
+formula = "precision ~ -1 + simple_coder1 + simple_coder2 + simple_coder3 + simple_coder4 + C(coder) + C(move)"
+result = smf.ols(formula, data=df_long).fit()
+print(result.summary())
+
+outcome = "recall"
+df = df_long[df_long.coder == 4]
+formula = outcome + " ~ simple_scheme + C(move) + week"
+result = smf.ols(formula, data=df.dropna(subset=[outcome])).fit(
+    cov_type="cluster",
+    cov_kwds={"groups": df.dropna(subset=[outcome])["ID"]},
+    use_t=False,
+)
+print(result.summary())
+
+formula = "accuracy ~ + simple_scheme + C(week) +C(move) + C(coder)"
+result = smf.ols(formula, data=df_long).fit(
+    cov_type="cluster", cov_kwds={"groups": df_long["ID"]}, use_t=False
+)
+print(result.summary())
+# %%
 
 file = start.RESULTS_PATH + "main_results.xlsx"
 wb = load_workbook(file)
@@ -73,16 +110,23 @@ def reg_to_excel(df: pd.DataFrame, outcome: str, start_row: int, start_col: int)
     df = df.rename(columns={outcome: "outcome"})
 
     x_list = [
-        "in_context",
+        "simple_scheme",
         "C(week)[T.2]",
         "C(week)[T.3]",
         "C(week)[T.4]",
         "C(coder)[T.2]",
         "C(coder)[T.3]",
         "C(coder)[T.4]",
+        "C(move)[T.2.0]",
+        "C(move)[T.3.0]",
+        "C(move)[T.4.0]",
+        "C(move)[T.5.0]",
+        "C(move)[T.6.0]",
+        "C(move)[T.7.0]",
+        "C(move)[T.8.0]",
     ]
 
-    formula = "outcome ~ in_context + C(move) + C(week) + C(coder)"
+    formula = "outcome ~ simple_scheme + C(move) + C(week) + C(coder)"
     result = smf.ols(formula, data=df).fit(
         cov_type="cluster", cov_kwds={"groups": df["ID"]}, use_t=False
     )
