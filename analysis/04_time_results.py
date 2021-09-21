@@ -61,6 +61,10 @@ ax.legend()
 # plt.yticks([0, 30, 60, 90, 120, 150, 180, 210, 240])
 plt.savefig(start.RESULTS_PATH + "single_case_time.png")
 
+print(df[df.context == "out"].seconds_per_utterance.mean())
+print(df[df.context == "in"].seconds_per_utterance.mean())
+
+
 # %%
 time_in_context = df[df.context == "in"]
 
