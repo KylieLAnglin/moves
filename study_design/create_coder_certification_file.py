@@ -30,14 +30,14 @@ EXCLUDE_TRANSCRIPTS = [
 ]
 # %%
 
-files = os.listdir(start.SHARED_PATH + "excel transcripts/")
+files = os.listdir(start.CC_PATH + "excel transcripts/")
 files_xlsx = [f for f in files if f[-4:] == "xlsx"]
 
 # %%
 df = pd.DataFrame()
 
 for filename in files_xlsx:
-    file_path = start.SHARED_PATH + "excel transcripts/"
+    file_path = start.CC_PATH + "excel transcripts/"
     data = pd.read_excel(file_path + filename)
     data["doc"] = filename
     df = df.append(data)

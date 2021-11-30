@@ -9,11 +9,11 @@ import statsmodels.formula.api as smf
 
 from moves.library import start
 
-df_long = pd.read_csv(start.DATA_PATH + "clean/final_long.csv")
+df_long = pd.read_csv(start.CC_PATH + "data/clean/final_long.csv")
 df_long["simple_scheme"] = np.where(df_long.in_context == 0, 1, 0)
 
 # %%
-file = start.RESULTS_PATH + "main_results.xlsx"
+file = start.CC_PATH + "results/" + "main_results.xlsx"
 wb = load_workbook(file)
 ws = wb.active
 
@@ -153,7 +153,7 @@ def hte_reg_to_excel(df: pd.DataFrame, outcome: str, start_row: int, start_col: 
 
 
 # %%
-file = start.RESULTS_PATH + "main_results_by_coder.xlsx"
+file = start.CC_PATH + "results/" + "main_results_by_coder.xlsx"
 wb = load_workbook(file)
 ws = wb.active
 

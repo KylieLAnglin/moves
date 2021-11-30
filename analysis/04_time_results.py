@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 from moves.library import start
 
-time = pd.read_csv(start.DATA_PATH + "clean/" + "times.csv")
+time = pd.read_csv(start.CC_PATH + "data/clean/" + "times.csv")
 
 
 # %%
@@ -59,7 +59,7 @@ plt.ylabel("Seconds")
 plt.xticks([1, 2, 3, 4, 5], labels=label_list)
 ax.legend()
 # plt.yticks([0, 30, 60, 90, 120, 150, 180, 210, 240])
-plt.savefig(start.RESULTS_PATH + "single_case_time.png")
+plt.savefig(start.CC_PATH + "results/" + "single_case_time.png")
 
 print(df[df.context == "out"].seconds_per_utterance.mean())
 print(df[df.context == "in"].seconds_per_utterance.mean())
@@ -136,7 +136,7 @@ plt.ylabel("Seconds")
 plt.xticks([1, 2, 3, 4, 5], labels=label_list)
 ax.legend()
 # plt.yticks([0, 30, 60, 90, 120, 150, 180, 210, 240])
-plt.savefig(start.RESULTS_PATH + "single_case_time_per_code.png")
+plt.savefig(start.CC_PATH + "results/" + "single_case_time_per_code.png")
 
 
 print(

@@ -9,8 +9,8 @@ from moves.library import start
 # %%
 
 
-code_df = pd.read_csv(start.DATA_PATH + "clean/" + "final_wide.csv")
-text_df = pd.read_csv(start.SHARED_PATH + "utterance_id.csv")
+code_df = pd.read_csv(start.CC_PATH + "data/clean/" + "final_wide.csv")
+text_df = pd.read_csv(start.CC_PATH + "data/utterance_id.csv")
 
 
 # %%

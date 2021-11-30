@@ -40,8 +40,8 @@ def import_incontext(folder_path: str, week: int, coder: int):
     )
     for transcript in transcript_ns:
         df = pd.read_excel(
-            start.SHARED_PATH
-            + "coding/"
+            start.CC_PATH
+            + "data/"
             + folder_path
             + "Transcript"
             + str(transcript)
@@ -137,7 +137,7 @@ incontext_b = pd.concat([week1_coder3, week2_coder4, week3_coder3, week4_coder4]
 def import_outcontext(folder_path: str, week: int, coder: int):
     move = moves[0]
     coder_df = pd.read_excel(
-        start.SHARED_PATH + "coding/" + folder_path + move + ".xlsx",
+        start.CC_PATH + "data/" + folder_path + move + ".xlsx",
         skiprows=3,
     ).rename(columns={"Code": "move1", "ID 3": "ID", "ID 3 ": "ID"})[
         ["ID", "Coach Text", "move1"]
@@ -146,7 +146,7 @@ def import_outcontext(folder_path: str, week: int, coder: int):
     for n in list(range(2, 9)):
         move = moves[n - 1]
         df = pd.read_excel(
-            start.SHARED_PATH + "coding/" + folder_path + move + ".xlsx",
+            start.CC_PATH + "data/" + folder_path + move + ".xlsx",
             skiprows=3,
         ).rename(columns={"Code": "move" + str(n), "ID 3": "ID", "ID 3 ": "ID"})[
             ["ID", "move" + str(n)]
@@ -231,7 +231,7 @@ def merge_coders(move: str):
 
 for n in list(range(1, 9)):
     move_df = merge_coders(move=moves[n - 1]).sort_values(by="ID")
-    move_df.to_csv(start.DATA_PATH + "clean/" + moves[n - 1] + ".csv", index=False)
+    move_df.to_csv(start.CC_PATH + "data/clean/" + moves[n - 1] + ".csv", index=False)
 
 
 # %%

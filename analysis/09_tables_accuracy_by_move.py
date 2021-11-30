@@ -11,10 +11,10 @@ import statsmodels.formula.api as smf
 from moves.library import start
 
 # %%
-df_long = pd.read_csv(start.DATA_PATH + "clean/final_long.csv")
+df_long = pd.read_csv(start.CC_PATH + "data/clean/final_long.csv")
 # %%
 
-file = start.RESULTS_PATH + "hte_results.xlsx"
+file = start.CC_PATH + "results/" + "results_hte.xlsx"
 wb = load_workbook(file)
 ws = wb.active
 
@@ -84,7 +84,7 @@ wb.save(file)
 
 # %%
 
-file = start.RESULTS_PATH + "results_hte.xlsx"
+file = start.CC_PATH + "results/" + "results_hte.xlsx"
 wb = load_workbook(file)
 ws = wb.active
 

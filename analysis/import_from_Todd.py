@@ -14,7 +14,7 @@ print("File date:", file_date)
 
 file_folder = start.IRR_PATH + "outputs/spotcheck_files/"
 
-utterance_id = pd.read_csv(start.SHARED_PATH + "/utterance_id.csv")
+utterance_id = pd.read_csv(start.CC_PATH + "/utterance_id.csv")
 
 filenames = [
     "af_anticipation_check",

@@ -6,12 +6,12 @@ import numpy as np
 from moves.library import start
 
 # %%
-utterance_ids = pd.read_csv(start.SHARED_PATH + "utterance_id.csv")
+utterance_ids = pd.read_csv(start.CC_PATH + "utterance_id.csv")
 
 # %% import in context files to get a list of transcripts by merging with utterance id.
 files = [
     filename
-    for filename in os.listdir(start.SHARED_PATH + "coding/Week 3 Coder 1 In-Context")
+    for filename in os.listdir(start.CC_PATH + "coding/Week 3 Coder 1 In-Context")
     if fnmatch.fnmatch(filename, "*.xlsx") and not filename.startswith("~$")
 ]
 
@@ -19,7 +19,7 @@ in_context = pd.DataFrame()
 for file in files:
 
     df = pd.read_excel(
-        start.SHARED_PATH + "coding/Week 3 Coder 1 In-Context/" + file,
+        start.CC_PATH + "coding/Week 3 Coder 1 In-Context/" + file,
         skiprows=2,
     ).rename(columns={"ID 3": "ID", "ID 3 ": "ID"})
 
@@ -39,7 +39,7 @@ in_context_transcripts = list(in_context.doc.unique())
 
 # %% import out of context files to get list of transcripts
 out_context = pd.read_excel(
-    start.SHARED_PATH
+    start.CC_PATH
     + "coding/Week 3 Coder 2 Out-of-Context/1 TellBack Positive Evaluation.xlsx",
     skiprows=3,
 )
@@ -54,7 +54,7 @@ out_context = out_context.merge(
 
 out_context_transcripts = list(out_context.doc.unique())
 # %% Big list of utterances
-df = pd.read_csv(start.SHARED_PATH + "utterance_id.csv")
+df = pd.read_csv(start.CC_PATH + "utterance_id.csv")
 
 coach_df = df[df.Speaker == "Coach"]
 teacher_df = df[df.Speaker != "Coach"]
@@ -74,7 +74,7 @@ new_df["preceding_teacher_text"] = np.where(
 )
 
 # %% Create new week 4 assignments
-# start.SHARED_PATH + "/coding files/Week 4 In-Context /"
+# start.CC_PATH + "/coding files/Week 4 In-Context /"
 new_week_4_out_of_context = new_df[new_df.doc.isin(in_context_transcripts)]
 new_week_4_out_of_context = new_week_4_out_of_context.sample(
     len(new_week_4_out_of_context), random_state=5
@@ -158,7 +158,7 @@ def create_out_of_context_files(filepath: str, turns_df: pd.DataFrame):
 
 
 create_out_of_context_files(
-    start.SHARED_PATH + "/coding files/Week 4 Out-of-Context NEW/",
+    start.CC_PATH + "/coding files/Week 4 Out-of-Context NEW/",
     turns_df=new_week_4_out_of_context,
 )
 
@@ -246,7 +246,7 @@ def create_in_context_file(filepath: str, turns_df: pd.DataFrame):
 
 
 create_in_context_file(
-    filepath=start.SHARED_PATH + "coding files/Week 4 In-Context NEW/",
+    filepath=start.CC_PATH + "coding files/Week 4 In-Context NEW/",
     turns_df=new_week_4_in_context,
 )
 # %%

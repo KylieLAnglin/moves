@@ -10,14 +10,14 @@ from moves.library import start
 
 
 # %%
-random_order = pd.read_csv(start.SHARED_PATH + "assignments.csv")
+random_order = pd.read_csv(start.CC_PATH + "assignments.csv")
 
 transcript_files = list(random_order["0"])
 transcript_files = [f[:-4] + "xlsx" for f in transcript_files]
 
 
 # %%
-df = pd.read_csv(start.SHARED_PATH + "utterance_id.csv")
+df = pd.read_csv(start.CC_PATH + "utterance_id.csv")
 
 coach_df = df[df.Speaker == "Coach"]
 teacher_df = df[df.Speaker != "Coach"]
@@ -141,23 +141,23 @@ def create_out_of_context_files(filepath: str, turns_df: pd.DataFrame):
 
 # %%
 create_out_of_context_files(
-    filepath=start.SHARED_PATH + "coding files/Week 0 Out-of-Context/",
+    filepath=start.CC_PATH + "coding files/Week 0 Out-of-Context/",
     turns_df=week0_outcontext,
 )
 create_out_of_context_files(
-    filepath=start.SHARED_PATH + "coding files/Week 1 Out-of-Context/",
+    filepath=start.CC_PATH + "coding files/Week 1 Out-of-Context/",
     turns_df=week1_outcontext,
 )
 create_out_of_context_files(
-    filepath=start.SHARED_PATH + "coding files/Week 2 Out-of-Context/",
+    filepath=start.CC_PATH + "coding files/Week 2 Out-of-Context/",
     turns_df=week2_outcontext,
 )
 create_out_of_context_files(
-    filepath=start.SHARED_PATH + "coding files/Week 4a Out-of-Context/",
+    filepath=start.CC_PATH + "coding files/Week 4a Out-of-Context/",
     turns_df=week3_outcontext,
 )
 create_out_of_context_files(
-    filepath=start.SHARED_PATH + "coding files/Week 4b Out-of-Context/",
+    filepath=start.CC_PATH + "coding files/Week 4b Out-of-Context/",
     turns_df=week4_outcontext,
 )
 
@@ -243,27 +243,27 @@ def create_in_context_file(filepath: str, turns_df: pd.DataFrame):
 
 # %%
 create_in_context_file(
-    filepath=start.SHARED_PATH + "coding files/Week 0 In-Context/",
+    filepath=start.CC_PATH + "coding files/Week 0 In-Context/",
     turns_df=week0_incontext,
 )
 
 create_in_context_file(
-    filepath=start.SHARED_PATH + "coding files/Week 1 In-Context/",
+    filepath=start.CC_PATH + "coding files/Week 1 In-Context/",
     turns_df=week1_incontext,
 )
 
 create_in_context_file(
-    filepath=start.SHARED_PATH + "coding files/Week 2 In-Context/",
+    filepath=start.CC_PATH + "coding files/Week 2 In-Context/",
     turns_df=week2_incontext,
 )
 
 create_in_context_file(
-    filepath=start.SHARED_PATH + "coding files/Week 4a In-Context/",
+    filepath=start.CC_PATH + "coding files/Week 4a In-Context/",
     turns_df=week3_incontext,
 )
 
 create_in_context_file(
-    filepath=start.SHARED_PATH + "coding files/Week 4b In-Context/",
+    filepath=start.CC_PATH + "coding files/Week 4b In-Context/",
     turns_df=week4_incontext,
 )
 

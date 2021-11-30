@@ -23,7 +23,7 @@ from moves.library import start
 
 # %%
 code_df = pd.read_csv(start.DATA_PATH + "clean/" + "final_wide.csv")
-text_df = pd.read_csv(start.SHARED_PATH + "utterance_id.csv")
+text_df = pd.read_csv(start.CC_PATH + "utterance_id.csv")
 
 df = code_df.merge(
     text_df[["id", "Text"]], left_on="ID", right_on="id", indicator="_merge2"

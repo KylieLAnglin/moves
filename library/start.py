@@ -1,6 +1,7 @@
-HOME = "/Users/kylie/"
-# HOME = "/Users/kylieanglin/"
+# HOME = "/Users/kylie/"
+HOME = "/Users/kylieanglin/"
 
+CC_PATH = HOME + "Dropbox/Active/moves/code_in_context/"
 
 SHARED_PATH = HOME + "Box Sync/Measuring Coaching Fidelity and Quality/-coaching moves/"
 IRR_PATH = (

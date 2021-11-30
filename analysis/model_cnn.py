@@ -12,7 +12,7 @@ from spacy.tokens import DocBin
 nlp = spacy.load("en_core_web_sm")
 
 code_df = pd.read_csv(start.DATA_PATH + "clean/" + "final_wide.csv")
-text_df = pd.read_csv(start.SHARED_PATH + "utterance_id.csv")
+text_df = pd.read_csv(start.CC_PATH + "utterance_id.csv")
 
 from moves.library import train_classifier
 

@@ -5,7 +5,7 @@ import numpy as np
 from moves.library import start
 
 # %%
-df = pd.read_csv(start.DATA_PATH + "clean/final_wide.csv")
+df = pd.read_csv(start.CC_PATH + "data/clean/final_wide.csv")
 
 # %%
 coder1 = df[(df.week == 1) | (df.week == 3)][
@@ -80,4 +80,4 @@ df_full["accuracy"] = np.where(df_full.code == df_full.master, 1, 0)
 
 df_full["in_context"] = np.where(df_full.context == "in", 1, 0)
 
-df_full.to_csv(start.DATA_PATH + "clean/" + "final_long.csv", index=False)
+df_full.to_csv(start.CC_PATH + "data/clean/" + "final_long.csv", index=False)

@@ -69,7 +69,7 @@ def myplot(outcome: str, ylabel: str, saveas: str, ymin, ymax):
     plt.ylim(ymin, ymax)
     plt.xticks([1, 2, 3, 4, 5], labels=label_list)
     plt.legend()
-    plt.savefig(start.RESULTS_PATH + saveas)
+    plt.savefig(start.CC_PATH + "results/" + saveas)
 
 
 myplot("accuracy", "Accuracy", saveas="single_case_accuracy.png", ymin=0.9, ymax=1)

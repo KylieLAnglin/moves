@@ -3,7 +3,7 @@ import pandas as pd
 
 from moves.library import start
 
-
+# %%
 # %% Extract time
 
 
@@ -14,12 +14,7 @@ def extract_times_in_context(folder_path: str, week: int, coder: int):
 
     for n in list(range(1, 11)):
         time_df = pd.read_excel(
-            start.SHARED_PATH
-            + "coding/"
-            + folder_path
-            + "Transcript"
-            + str(n)
-            + ".xlsx"
+            start.CC_PATH + "data/" + folder_path + "Transcript" + str(n) + ".xlsx"
         ).head(1)[["Minutes", "Seconds"]]
         time_df["week"] = week
         time_df["coder"] = coder
@@ -27,12 +22,7 @@ def extract_times_in_context(folder_path: str, week: int, coder: int):
         time_df["seconds"] = time_df.Minutes * 60 + time_df.Seconds
 
         len_df = pd.read_excel(
-            start.SHARED_PATH
-            + "coding/"
-            + folder_path
-            + "Transcript"
-            + str(n)
-            + ".xlsx",
+            start.CC_PATH + "data/" + folder_path + "Transcript" + str(n) + ".xlsx",
             skiprows=2,
         )
         time_df["utterances"] = len(
@@ -128,7 +118,7 @@ def extract_time_out_context(folder_path: str, week: int, coder: int):
     outcontext_time_df = pd.DataFrame(columns=["week", "coder", "move", "seconds"])
     for move in moves:
         time_df = pd.read_excel(
-            start.SHARED_PATH + "coding/" + folder_path + move + ".xlsx"
+            start.CC_PATH + "data/" + folder_path + move + ".xlsx"
         ).loc[0:0][["Minutes", "Seconds"]]
 
         time_df["week"] = week
@@ -138,7 +128,7 @@ def extract_time_out_context(folder_path: str, week: int, coder: int):
         outcontext_time_df = outcontext_time_df.append(time_df)
 
     len_df = pd.read_excel(
-        start.SHARED_PATH + "coding/" + folder_path + move + ".xlsx", skiprows=2
+        start.CC_PATH + "data/" + folder_path + move + ".xlsx", skiprows=2
     )
     outcontext_time_df["utterances"] = len(len_df)
 
@@ -211,4 +201,4 @@ time = incontext_total_time.append(outcontext_total_time)
 time["seconds_per_utterance"] = time.seconds / time.utterances
 time["seconds_per_10"] = (time.seconds / time.utterances) * 10
 
-time.to_csv(start.DATA_PATH + "clean/" + "times.csv")
+time.to_csv(start.CC_PATH + "data/clean/" + "times.csv")

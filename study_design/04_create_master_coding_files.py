@@ -10,12 +10,12 @@ from moves.library import start
 
 
 # %%
-random_order = pd.read_csv(start.SHARED_PATH + "assignments.csv")
+random_order = pd.read_csv(start.CC_PATH + "assignments.csv")
 
 transcript_files = list(random_order["0"])
 transcript_files = [f[:-4] + "xlsx" for f in transcript_files]
 
-df = pd.read_csv(start.SHARED_PATH + "utterance_id.csv")
+df = pd.read_csv(start.CC_PATH + "utterance_id.csv")
 
 # %% Select 10 transcripts for coding
 week0_list = list(transcript_files[0:1])
@@ -110,7 +110,7 @@ def create_in_context_file(filepath: str, turns_df: pd.DataFrame):
 
 # %%
 create_in_context_file(
-    filepath=start.SHARED_PATH + "coding files/master coding/",
+    filepath=start.CC_PATH + "coding files/master coding/",
     turns_df=master_transcripts,
 )
 

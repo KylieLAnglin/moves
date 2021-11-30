@@ -11,11 +11,11 @@ import statsmodels.formula.api as smf
 from moves.library import start
 
 # %%
-df = pd.read_csv(start.DATA_PATH + "clean/final_wide.csv")
+df = pd.read_csv(start.CC_PATH + "data/clean/final_wide.csv")
 
 # %% Sample Descriptives
 
-file = start.RESULTS_PATH + "sample_descriptives.xlsx"
+file = start.CC_PATH + "results/" + "sample_descriptives.xlsx"
 wb = load_workbook(file)
 ws = wb.active
 
