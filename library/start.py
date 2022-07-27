@@ -1,15 +1,13 @@
 HOME = "/Users/kla21002/"
 # HOME = "/Users/kylieanglin/"
 
-CC_PATH = HOME + "Dropbox/Active/moves/code_in_context/"
-
-SHARED_PATH = HOME + "Box Sync/Measuring Coaching Fidelity and Quality/-coaching moves/"
+SHARED_PATH = HOME + "Box Sync/Measuring Coaching Fidelity and Quality/"
 IRR_PATH = (
     HOME
     + "Box Sync/Measuring Coaching Fidelity and Quality/-coder training/Interrater Reliability/"
 )
 
-TRANSCRIPTS_PATH = SHARED_PATH + "uncoded transcripts/"
+TRANSCRIPTS_PATH = SHARED_PATH + "transcripts_for_coding/"
 
 MAIN_DIR = HOME + "Dropbox/Active/moves/"
 DATA_PATH = HOME + "Dropbox/Active/moves/data/"
