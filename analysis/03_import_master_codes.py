@@ -6,7 +6,7 @@ import numpy as np
 
 from moves.library import start
 
-MASTER_FILES = start.CC_PATH + "data/master coding/"
+MASTER_FILES = start.SHARED_PATH + "coding files/master coding/"
 
 # %%
 filenames = os.listdir(MASTER_FILES)

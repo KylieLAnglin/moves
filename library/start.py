@@ -1,5 +1,5 @@
-# HOME = "/Users/kylie/"
-HOME = "/Users/kylieanglin/"
+HOME = "/Users/kla21002/"
+# HOME = "/Users/kylieanglin/"
 
 CC_PATH = HOME + "Dropbox/Active/moves/code_in_context/"
 
