@@ -21,7 +21,7 @@ missing_tags = []
 for file in files:
     if file not in speaker_tags_list:
         missing_tags.append(file)
-    if file in speaker_tags_list:
-        print(file, " in list")
+    # if file in speaker_tags_list:
+    #     # print(file, " in list")
 
 # %%
