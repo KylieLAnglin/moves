@@ -1,3 +1,4 @@
+# %%
 import os
 import re
 import fnmatch
@@ -50,7 +51,7 @@ bolded_and_wrapped = workbook.add_format(
     {"color": "black", "bold": True, "text_wrap": True}
 )
 worksheet.set_column(2, 3, 30)
-worksheet.set_column(10, 15, 30)
+worksheet.set_column(15, 20, 30)
 
 
 worksheet.write("A1", "ID", bolded)
@@ -62,7 +63,13 @@ worksheet.write("F1", "Move 2", bolded)
 worksheet.write("G1", "Move 3", bolded)
 worksheet.write("H1", "Move 4", bolded)
 worksheet.write("I1", "Move 5", bolded)
-worksheet.write("J1", "Mark as Question", bolded)
+worksheet.write("J1", "Move 6", bolded)
+worksheet.write("K1", "Move 7", bolded)
+worksheet.write("L1", "Move 8", bolded)
+worksheet.write("M1", "Move 9", bolded)
+worksheet.write("N1", "Move 10", bolded)
+
+worksheet.write("O1", "Mark as Question", bolded)
 
 start_row = 1
 col = 0
@@ -93,40 +100,34 @@ col = 20
 for move in MOVES:
     worksheet.write(start_row, col, move)
     start_row = start_row + 1
-worksheet.data_validation(1, 4, 100, 8, {"validate": "list", "source": "U2:U41"})
+worksheet.data_validation(1, 4, 100, 13, {"validate": "list", "source": "=$U$2:$U$41"})
 
 answers = ["never or rarely", "about half of the time", "most of the time"]
 worksheet.write(
-    "K1",
+    "P1",
     "How frequently does the coach use brief interjections that indicate the coach is listening (e.g. yeah, uh-huh, okay)?",
     wrapped,
 )
-worksheet.data_validation("K2", {"validate": "list", "source": answers})
+worksheet.data_validation("P2", {"validate": "list", "source": answers})
 
 worksheet.write(
-    "L1",
+    "Q1",
     "To what extent is the coach’s responding to teacher questions throughout the conversation?",
     wrapped,
 )
-worksheet.data_validation("L2", {"validate": "list", "source": answers})
+worksheet.data_validation("Q2", {"validate": "list", "source": answers})
 
 worksheet.write(
-    "M1",
+    "R1",
     "To what extent is the coach’s responding to teacher questions throughout the conversation?",
     wrapped,
 )
-worksheet.data_validation("M2", {"validate": "list", "source": answers})
+worksheet.data_validation("R2", {"validate": "list", "source": answers})
 
 worksheet.write(
-    "N1", "To what extent are Ask-Forward questions closed yes/no questions?", wrapped
+    "S1", "To what extent are Ask-Forward questions closed yes/no questions?", wrapped
 )
-worksheet.data_validation("N2", {"validate": "list", "source": answers})
-
-worksheet.write("O1", "What is the start time for the conversation?", wrapped)
-worksheet.data_validation("O2", {"validate": "list", "source": "B2:B60"})
-
-worksheet.write("P1", "What is the end time for the conversation?", wrapped)
-worksheet.data_validation("P2", {"validate": "list", "source": "B2:B60"})
+worksheet.data_validation("S2", {"validate": "list", "source": answers})
 
 
 workbook.close()
