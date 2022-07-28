@@ -44,8 +44,9 @@ def extract_data_from_go_transcript(turns_of_talk: list):
     time_stamps = [tag[0] if tag else "" for tag in time_stamps]
 
     turns_of_talk = [re.sub(time_stamp_regex, "", text) for text in turns_of_talk]
+    speaker_tag_regex = re.compile(r"([a-zA-Z1-3\[\]\s]+)\:")
 
-    speaker_tag_regex = re.compile(r"(\S[a-zA-Z1-3]+)\:")
+    # speaker_tag_regex = re.compile(r"(\S[a-zA-Z1-3]+)\:")
     speaker_tags = [speaker_tag_regex.findall(text) for text in turns_of_talk]
 
     turns_of_talk = [re.sub(speaker_tag_regex, "", text) for text in turns_of_talk]
@@ -70,6 +71,42 @@ def extract_data_from_go_transcript(turns_of_talk: list):
         time_stamps=time_stamps, speaker_tags=speaker_tags, text=turns_of_talk
     )
 
+    return transcript
+
+
+def txt_to_transcript(filepath, filename):
+
+    file1 = open(filepath + filename, "r")
+    lines = file1.readlines()
+
+    preambles = []
+    texts = []
+    count = 0
+    # Strips the newline character
+    for line in lines:
+        if count == 0:
+            if not line.startswith("Transcribed by "):
+                preambles.append(line.strip())
+
+        if count == 1:
+            texts.append(line.strip())
+        count += 1
+        if count > 2:
+            count = 0
+
+    time_stamp_regex = re.compile(r"[\d]:[\d][\d]")
+    time_stamps = [time_stamp_regex.findall(preamble) for preamble in preambles]
+    time_stamps = [tag[0] if tag else "" for tag in time_stamps]
+
+    speakers = []
+    for preamble, time in zip(preambles, time_stamps):
+        speakers.append(preamble.replace(time, "").strip())
+
+    Transcript = collections.namedtuple(
+        "Transcript", ["time_stamps", "speaker_tags", "text"]
+    )
+
+    transcript = Transcript(time_stamps=time_stamps, speaker_tags=speakers, text=texts)
     return transcript
 
 
