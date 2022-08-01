@@ -105,7 +105,8 @@ def write_excel(output_path, doc_name, df):
     worksheet.write("M1", "Move 9", bolded)
     worksheet.write("N1", "Move 10", bolded)
 
-    worksheet.write("O1", "Mark as Question", bolded)
+    worksheet.write("O1", "Additional Moves", bolded)
+    worksheet.write("P1", "Notes", bolded)
 
     # id
     start_row = 1
@@ -132,43 +133,46 @@ def write_excel(output_path, doc_name, df):
         worksheet.write(start_row, col, value, wrapped)
         start_row = start_row + 1
 
+    # Print moves for validation
     start_row = 1
-    col = 20
+    col = 25
     for move in MOVES:
         worksheet.write(start_row, col, move)
         start_row = start_row + 1
+
+    # Add move validation
     worksheet.data_validation(
-        1, 4, 100, 13, {"validate": "list", "source": "=$U$2:$U$41"}
+        1, 4, 100, 13, {"validate": "list", "source": "=$Z$2:$Z$41"}
     )
 
     answers = ["never or rarely", "about half of the time", "most of the time"]
     worksheet.write(
-        "P1",
-        "How frequently does the coach use brief interjections that indicate the coach is listening (e.g. yeah, uh-huh, okay)?",
-        wrapped,
-    )
-    worksheet.data_validation("P2", {"validate": "list", "source": answers})
-
-    worksheet.write(
         "Q1",
-        "To what extent is the coach’s responding to teacher questions throughout the conversation?",
+        "How frequently does the coach use brief interjections that indicate the coach is listening (e.g. yeah, uh-huh, okay)?",
         wrapped,
     )
     worksheet.data_validation("Q2", {"validate": "list", "source": answers})
 
     worksheet.write(
         "R1",
-        "To what extent is the coach’s responding to teacher questions throughout the conversation?",
+        "To what extent is the coach responding to teacher questions throughout the conversation?",
         wrapped,
     )
     worksheet.data_validation("R2", {"validate": "list", "source": answers})
 
     worksheet.write(
         "S1",
-        "To what extent are Ask-Forward questions closed yes/no questions?",
+        "To what extent are the coach's Ask-Back questions closed, yes/no questions?",
         wrapped,
     )
     worksheet.data_validation("S2", {"validate": "list", "source": answers})
+
+    worksheet.write(
+        "T1",
+        "To what extent are the coach's Ask-Forward questions closed, yes/no questions?",
+        wrapped,
+    )
+    worksheet.data_validation("T2", {"validate": "list", "source": answers})
 
     workbook.close()
 
@@ -203,8 +207,8 @@ for filename in files:
     write_excel(output_path=output_path, doc_name=doc_name, df=df)
 
 # %% Clean txt files
-filename = "01_004_22c_028.txt"
-doc_name = filename.replace(".docx", "").replace(".txt", "")
+filename = "03_004_22c_051.txt"
+doc_name = filename.replace(".txt", "")
 filepath = start.SHARED_PATH + "transcripts_for_coding/"
 output_path = start.SHARED_PATH + "transcripts_to_excel/"
 # df = create_transcript_df(filepath=filepath, filename=filename, input="word")
@@ -215,7 +219,7 @@ files = [
     if fnmatch.fnmatch(filename, "*.txt") and not filename.startswith("~$")
 ]
 for filename in files:
-    doc_name = filename.replace(".docx", "")
+    doc_name = filename.replace(".txt", "")
     filepath = start.SHARED_PATH + "transcripts_for_coding/"
     output_path = start.SHARED_PATH + "transcripts_to_excel/"
     df = create_transcript_df(filepath=filepath, filename=filename, input="txt")
