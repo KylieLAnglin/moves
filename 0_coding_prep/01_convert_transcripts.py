@@ -17,7 +17,7 @@ from moves.library import dictionary_tools
 
 # %%
 moves = pd.read_excel(start.SHARED_PATH + "-coaching moves/List of Moves.xlsx")
-speaker_tags_df = pd.read_excel(start.DATA_PATH + "speaker_tags.xlsx")
+speaker_tags_df = pd.read_excel(start.SHARED_PATH + "speaker_tags.xlsx")
 speaker_tags = speaker_tags_df.set_index("doc").to_dict(orient="index")
 speaker_tags = dictionary_tools.fold_nested_dictionary(speaker_tags, "coach")
 
@@ -31,13 +31,13 @@ for cat in types:
 
 
 # %% Create df
-def create_transcript_df(filepath, filename, input):
-    if input == "word":
+def create_transcript_df(filepath, filename, extension):
+    if extension == ".docx":
         # Word to transcript dict
         transcript = process_transcripts.word_to_transcript(
-            doc_file=filepath + filename
+            doc_file=filepath + filename + extension
         )
-    if input == "txt":
+    if extension == ".txt":
         transcript = process_transcripts.txt_to_transcript(
             filepath=filepath, filename=filename
         )
@@ -46,10 +46,11 @@ def create_transcript_df(filepath, filename, input):
     transcript_df = transcript_df.reset_index().rename(columns={"index": "turn_count"})
 
     # fix speaker tags
-    if filename in list(speaker_tags_df.doc):
-        transcript_df = transcript_df.replace(speaker_tags[filename][:-1], "Coach")
-    else:
-        transcript_df = transcript_df.replace("Teach SIM", "Coach")
+    full_filename = filename + extension
+    if full_filename in list(speaker_tags_df.doc):
+        transcript_df = transcript_df.replace(
+            speaker_tags[full_filename].replace(":", ""), "Coach"
+        )
 
     # Create df with preceding utterance
     coach_df = transcript_df[transcript_df.speaker == "Coach"]
@@ -75,9 +76,9 @@ def create_transcript_df(filepath, filename, input):
 # %%
 
 
-def write_excel(output_path, doc_name, df):
+def write_excel(output_path, filename, df):
     # Print workbook
-    workbook = xlsxwriter.Workbook(output_path + doc_name + ".xlsx")
+    workbook = xlsxwriter.Workbook(output_path + filename + ".xlsx")
     worksheet = workbook.add_worksheet()
 
     bolded = workbook.add_format({"bold": True, "italic": False})
@@ -178,43 +179,37 @@ def write_excel(output_path, doc_name, df):
 
 
 # %% Test
-filename = "01_1920_01_1154874_22c_Transcript.docx"
-filename = "2019_114_5C_Transcript.docx"
-filename = "2019_97_5C_Transcript.docx"
-doc_name = filename.replace(".docx", "").replace(".txt", "")
+filename = "2019_96_5C_Transcript"
 filepath = start.SHARED_PATH + "transcripts_for_coding/"
 output_path = start.SHARED_PATH + "transcripts_to_excel/"
-df = create_transcript_df(filepath=filepath, filename=filename, input="word")
-write_excel(output_path=output_path, doc_name=doc_name, df=df)
+df = create_transcript_df(filepath=filepath, filename=filename, extension=".docx")
+write_excel(output_path=output_path, filename=filename, df=df)
 
 
 # %% Word files
 files = [
-    filename
+    filename.replace(".docx", "")
     for filename in os.listdir(start.SHARED_PATH + "transcripts_for_coding/")
     if fnmatch.fnmatch(filename, "*.docx") and not filename.startswith("~$")
 ]
-lengths = []
 short = []
 for filename in files:
-    doc_name = filename.replace(".docx", "")
     filepath = start.SHARED_PATH + "transcripts_for_coding/"
     output_path = start.SHARED_PATH + "transcripts_to_excel/"
-    df = create_transcript_df(filepath=filepath, filename=filename, input="word")
-    lengths.append(filename + " " + str(len(df)))
-    if len(df) < 5:
-        short.append(filename + " " + str(len(df)))
-    write_excel(output_path=output_path, doc_name=doc_name, df=df)
+    df = create_transcript_df(filepath=filepath, filename=filename, extension=".docx")
+    if len(df) < 3:
+        short.append(filename)
+    write_excel(output_path=output_path, filename=filename, df=df)
 
 # %% Clean txt files
-filename = "03_004_22c_051.txt"
+filename = "01_004_22c_032.txt"
 doc_name = filename.replace(".txt", "")
 filepath = start.SHARED_PATH + "transcripts_for_coding/"
 output_path = start.SHARED_PATH + "transcripts_to_excel/"
 # df = create_transcript_df(filepath=filepath, filename=filename, input="word")
 # write_excel(output_path=output_path, doc_name=doc_name, df=df)
 files = [
-    filename
+    filename.replace(".txt", "")
     for filename in os.listdir(start.SHARED_PATH + "transcripts_for_coding/")
     if fnmatch.fnmatch(filename, "*.txt") and not filename.startswith("~$")
 ]
@@ -222,9 +217,8 @@ for filename in files:
     doc_name = filename.replace(".txt", "")
     filepath = start.SHARED_PATH + "transcripts_for_coding/"
     output_path = start.SHARED_PATH + "transcripts_to_excel/"
-    df = create_transcript_df(filepath=filepath, filename=filename, input="txt")
-    lengths.append(filename + " " + str(len(df)))
-    if len(df) < 5:
-        short.append(filename + " " + str(len(df)))
-    write_excel(output_path=output_path, doc_name=doc_name, df=df)
+    df = create_transcript_df(filepath=filepath, filename=filename, extension=".txt")
+    if len(df) < 3:
+        short.append(filename)
+    write_excel(output_path=output_path, filename=doc_name, df=df)
 # %%

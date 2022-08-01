@@ -76,7 +76,7 @@ def extract_data_from_go_transcript(turns_of_talk: list):
 
 def txt_to_transcript(filepath, filename):
 
-    file1 = open(filepath + filename, "r")
+    file1 = open(filepath + filename + ".txt", "r")
     lines = file1.readlines()
 
     preambles = []
